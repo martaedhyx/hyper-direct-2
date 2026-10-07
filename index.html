@@ -44,16 +44,20 @@ function bind(c){
  conn=c;
  c.on('open',()=>msg('TERHUBUNG ✓'));
  c.on('data',data=>{
-   if(data&&data.kind==='file'){meta=data;parts=[];transfer.textContent='Menerima '+data.name+'...';return}
-   if(meta&&data instanceof ArrayBuffer){
-     parts.push(data);
-     if(parts.reduce((n,x)=>n+x.byteLength,0)>=meta.size){
-       const blob=new Blob(parts,{type:meta.type||'application/octet-stream'});
-       const a=document.getElementById('download');
-       a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan '+meta.name;a.style.display='block';
-       transfer.textContent='File diterima ✓';
-       meta=null;parts=[];
-     }
+   if(data&&data.kind==='file-start'){meta=data;parts=[];transfer.textContent='Menerima '+data.name+' (0%)...';return}
+   if(data&&data.kind==='file-end'){
+     if(!meta)return;
+     const blob=new Blob(parts,{type:meta.type||'application/octet-stream'});
+     const a=document.getElementById('download');
+     a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan '+meta.name;a.style.display='block';
+     transfer.textContent='File diterima ✓';
+     meta=null;parts=[];
+     return;
+   }
+   if(data&&data.kind==='file-chunk'){
+     parts.push(new Uint8Array(data.data));
+     const got=parts.reduce((n,x)=>n+x.byteLength,0);
+     if(meta)transfer.textContent='Menerima '+Math.min(100,Math.round(got/meta.size*100))+'%...';
    }
  });
  c.on('error',e=>msg('Koneksi bermasalah: '+(e.type||'error')));
@@ -84,14 +88,16 @@ document.getElementById('send').addEventListener('click',async()=>{
  const f=document.getElementById('file').files[0];
  if(!f){transfer.textContent='Pilih foto/file dulu.';return}
  if(!conn||!conn.open){transfer.textContent='Belum terhubung.';return}
- conn.send({kind:'file',name:f.name,size:f.size,type:f.type});
- const chunk=64*1024;let sent=0;
+ conn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});
+ const chunk=32*1024;let sent=0;
  while(sent<f.size){
-   const buf=await f.slice(sent,sent+chunk).arrayBuffer();
-   conn.send(buf);sent+=buf.byteLength;
+   const buf=new Uint8Array(await f.slice(sent,sent+chunk).arrayBuffer());
+   conn.send({kind:'file-chunk',data:Array.from(buf)});
+   sent+=buf.byteLength;
    transfer.textContent='Mengirim '+Math.round(sent/f.size*100)+'%';
-   await new Promise(r=>setTimeout(r,0));
+   await new Promise(r=>setTimeout(r,5));
  }
+ conn.send({kind:'file-end'});
  transfer.textContent='File terkirim ✓';
 });
 })();
