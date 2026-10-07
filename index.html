@@ -33,12 +33,14 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 </div>
 </div>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>window.peerLoaded=typeof Peer!=="undefined";</script>
 <script>
 const code=document.getElementById('code'),status=document.getElementById('status');
 let peer=null,conn=null,received=[];
 function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
 function setStatus(t){status.textContent=t}
 function startHost(c){
+  if(typeof Peer==='undefined'){setStatus('Library koneksi belum termuat. Muat ulang halaman lalu coba lagi.');return;}
   if(peer) peer.destroy();
   setStatus('Membuka jalur koneksi...');
   peer=new Peer(c,{debug:1});
@@ -54,6 +56,7 @@ conn.on('data',data=>handleData(data));
   });
 }
 function joinRoom(c){
+  if(typeof Peer==='undefined'){setStatus('Library koneksi belum termuat. Muat ulang halaman lalu coba lagi.');return;}
   if(peer) peer.destroy();
   setStatus('Menghubungkan ke room...');
   peer=new Peer(undefined,{debug:1});
