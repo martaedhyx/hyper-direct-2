@@ -13,20 +13,17 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 <div class="wrap">
 <div class="brand">Hyper Direct 2</div>
 <p class="small">Koneksi cepat HP ↔ laptop dan transfer foto/file.</p>
-
 <div class="card">
 <h3>Buat Room</h3>
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
 <div id="code" class="code">------</div>
 <div id="status" class="status">Belum terhubung.</div>
 </div>
-
 <div class="card">
 <h3>Masuk ke Room</h3>
 <input id="join" maxlength="6" placeholder="Masukkan kode room" autocomplete="off">
 <button type="button" onclick="window.hdJoinRoom()">Hubungkan</button>
 </div>
-
 <div class="card">
 <h3>Kirim Foto / File</h3>
 <input id="file" type="file">
@@ -35,102 +32,16 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 <a id="download" style="display:none" download></a>
 </div>
 </div>
-
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
-window.hdPeer=null;
-window.hdConn=null;
-window.hdMeta=null;
-window.hdParts=[];
-window.hdReceived=0;
-window.hdWaiting=null;
-
-function hdStatus(t){document.getElementById('status').textContent=t;}
-function hdTransfer(t){document.getElementById('transfer').textContent=t;}
-function hdCode(){return Math.random().toString(36).slice(2,8).toUpperCase();}
-
-window.hdCreateRoom=function(){
-  var c=hdCode();
-  document.getElementById('code').textContent=c;
-  hdStatus('Membuka room...');
-  if(typeof Peer==='undefined'){hdStatus('Kode sudah dibuat. Koneksi belum siap.');return;}
-  if(window.hdPeer){try{window.hdPeer.destroy();}catch(e){}}
-  window.hdPeer=new Peer(c,{debug:0});
-  window.hdPeer.on('open',function(){hdStatus('Room siap. Tunggu perangkat kedua...');});
-  window.hdPeer.on('connection',hdBind);
-  window.hdPeer.on('error',function(e){hdStatus('Room gagal: '+(e.type||'error'));});
-};
-
-window.hdJoinRoom=function(){
-  var c=document.getElementById('join').value.trim().toUpperCase();
-  if(c.length!==6){hdStatus('Masukkan kode 6 karakter.');return;}
-  if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return;}
-  if(window.hdPeer){try{window.hdPeer.destroy();}catch(e){}}
-  hdStatus('Menghubungkan...');
-  window.hdPeer=new Peer(undefined,{debug:0});
-  window.hdPeer.on('open',function(){
-    window.hdConn=window.hdPeer.connect(c,{reliable:true});
-    hdBind(window.hdConn);
-  });
-  window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'));});
-};
-
-function hdBind(c){
-  window.hdConn=c;
-  c.on('open',function(){hdStatus('TERHUBUNG ✓');});
-  c.on('close',function(){hdStatus('Koneksi terputus.');});
-  c.on('error',function(){hdStatus('Koneksi bermasalah.');});
-  c.on('data',function(data){
-    if(data&&data.kind==='file-start'){
-      window.hdMeta=data;window.hdParts=[];window.hdReceived=0;
-      document.getElementById('download').style.display='none';
-      hdTransfer('Menerima '+data.name+' (0%)...');
-      return;
-    }
-    if(data&&data.kind==='ack'){
-      window.hdWaiting=data.n;
-      return;
-    }
-    if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){
-      var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);
-      window.hdParts.push(u.slice());window.hdReceived+=u.byteLength;
-      hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...');
-      c.send({kind:'ack',n:window.hdReceived});
-      return;
-    }
-    if(data&&data.kind==='file-end'&&window.hdMeta){
-      var blob=new Blob(window.hdParts,{type:window.hdMeta.type||'application/octet-stream'});
-      var a=document.getElementById('download');
-      a.href=URL.createObjectURL(blob);a.download=window.hdMeta.name;
-      a.textContent='⬇ Simpan '+window.hdMeta.name;a.style.display='block';
-      hdTransfer('File diterima ✓');
-      window.hdMeta=null;window.hdParts=[];window.hdReceived=0;
-    }
-  });
-}
-
-window.hdSendFile=async function(){
-  var f=document.getElementById('file').files[0];
-  if(!f){hdTransfer('Pilih foto/file dulu.');return;}
-  if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return;}
-  window.hdWaiting=null;
-  window.hdConn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});
-  var pos=0,n=0,size=16384;
-  while(pos<f.size){
-    var b=await f.slice(pos,pos+size).arrayBuffer();
-    window.hdWaiting=pos+b.byteLength;
-    window.hdConn.send(b);
-    var start=Date.now();
-    while(window.hdWaiting===pos+b.byteLength){
-      if(Date.now()-start>15000){hdTransfer('Koneksi berhenti merespons.');return;}
-      await new Promise(function(r){setTimeout(r,10);});
-    }
-    pos+=b.byteLength;n++;
-    hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'%');
-  }
-  window.hdConn.send({kind:'file-end'});
-  hdTransfer('File terkirim ✓');
-};
+window.hdPeer=null;window.hdConn=null;window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdWaiting=null;
+function hdStatus(t){document.getElementById('status').textContent=t}
+function hdTransfer(t){document.getElementById('transfer').textContent=t}
+function hdCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+window.hdCreateRoom=function(){var c=hdCode();document.getElementById('code').textContent=c;hdStatus('Membuka room...');if(typeof Peer==='undefined'){hdStatus('Kode sudah dibuat. Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}window.hdPeer=new Peer(c,{debug:0});window.hdPeer.on('open',function(){hdStatus('Room siap. Tunggu perangkat kedua...')});window.hdPeer.on('connection',hdBind);window.hdPeer.on('error',function(e){hdStatus('Room gagal: '+(e.type||'error'))})};
+window.hdJoinRoom=function(){var c=document.getElementById('join').value.trim().toUpperCase();if(c.length!==6){hdStatus('Masukkan kode 6 karakter.');return}if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}hdStatus('Menghubungkan...');window.hdPeer=new Peer(undefined,{debug:0});window.hdPeer.on('open',function(){window.hdConn=window.hdPeer.connect(c,{reliable:true});hdBind(window.hdConn)});window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'))})};
+function hdBind(c){window.hdConn=c;c.on('open',function(){hdStatus('TERHUBUNG ✓')});c.on('close',function(){hdStatus('Koneksi terputus.')});c.on('error',function(){hdStatus('Koneksi bermasalah.')});c.on('data',function(data){if(data&&data.kind==='file-start'){window.hdMeta=data;window.hdParts=[];window.hdReceived=0;document.getElementById('download').style.display='none';hdTransfer('Menerima '+data.name+' (0%)...');return}if(data&&data.kind==='ack'){window.hdWaiting=data.n;return}if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);window.hdParts.push(u.slice());window.hdReceived+=u.byteLength;hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...');c.send({kind:'ack',n:window.hdReceived});return}if(data&&data.kind==='file-end'&&window.hdMeta){var blob=new Blob(window.hdParts,{type:window.hdMeta.type||'application/octet-stream'});var a=document.getElementById('download');a.href=URL.createObjectURL(blob);a.download=window.hdMeta.name;a.textContent='⬇ Simpan '+window.hdMeta.name;a.style.display='block';hdTransfer('File diterima ✓');window.hdMeta=null;window.hdParts=[];window.hdReceived=0}})}
+window.hdSendFile=async function(){var f=document.getElementById('file').files[0];if(!f){hdTransfer('Pilih foto/file dulu.');return}if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return}window.hdWaiting=null;window.hdConn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});var pos=0,size=262144;while(pos<f.size){var b=await f.slice(pos,pos+size).arrayBuffer();window.hdWaiting=pos+b.byteLength;window.hdConn.send(b);var start=Date.now();while(window.hdWaiting===pos+b.byteLength){if(Date.now()-start>15000){hdTransfer('Koneksi berhenti merespons.');return}await new Promise(function(r){setTimeout(r,10)})}pos+=b.byteLength;hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'%')}window.hdConn.send({kind:'file-end'});hdTransfer('File terkirim ✓')};
 </script>
 </body>
 </html>
