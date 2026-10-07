@@ -3,105 +3,98 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>Hyper Direct 2</title>
 <style>
-body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-width:560px;margin:auto;padding:24px 16px}.brand{font-size:30px;font-weight:800;color:#f26a21}.card{background:white;border-radius:18px;padding:18px;margin-top:14px;border:1px solid #eadfd8}button,input{width:100%;padding:13px;border-radius:12px;border:1px solid #d8ccc5;font:inherit;box-sizing:border-box}button{background:#f26a21;color:white;border:0;font-weight:700;margin-top:10px}.code{text-align:center;font-size:28px;font-weight:800;letter-spacing:5px;padding:12px;background:#fff3ea;border-radius:12px;margin-top:12px}.status{padding:12px;border-radius:12px;background:#f5f2ef;margin-top:12px}.small{font-size:13px;color:#756b65;line-height:1.5}
+body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-width:560px;margin:auto;padding:24px 16px}.brand{font-size:30px;font-weight:800;color:#f26a21}.card{background:#fff;border-radius:18px;padding:18px;margin-top:14px;border:1px solid #eadfd8}button,input{width:100%;padding:13px;border-radius:12px;border:1px solid #d8ccc5;font:inherit;box-sizing:border-box}button{background:#f26a21;color:#fff;border:0;font-weight:700;margin-top:10px}.code{text-align:center;font-size:28px;font-weight:800;letter-spacing:5px;padding:12px;background:#fff3ea;border-radius:12px;margin-top:12px}.status{padding:12px;border-radius:12px;background:#f5f2ef;margin-top:12px}.small{font-size:13px;color:#756b65;line-height:1.5}a{display:block;margin-top:12px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="brand">Hyper Direct 2</div>
-<p class="small">Versi uji cepat — fokus membuat dua perangkat mudah terhubung.</p>
+<p class="small">Koneksi cepat HP ↔ laptop dan transfer foto/file.</p>
 <div class="card">
 <h3>Buat room</h3>
-<button id="create">Buat Room</button>
+<button type="button" id="create">Buat Room</button>
 <div id="code" class="code">------</div>
-<p class="small">Bagikan kode room ini kepada teman. Fitur transfer file akan diaktifkan setelah jalur koneksi berhasil diuji.</p>
+<p class="small">Buat kode di perangkat pertama, lalu masukkan kode itu di perangkat kedua.</p>
 </div>
 <div class="card">
 <h3>Masuk ke room</h3>
-<input id="join" maxlength="6" placeholder="Masukkan kode room">
-<button id="connect">Hubungkan</button>
+<input id="join" maxlength="6" placeholder="Masukkan kode room" autocomplete="off">
+<button type="button" id="connect">Hubungkan</button>
 <div id="status" class="status">Belum terhubung.</div>
 </div>
 <div class="card">
 <h3>Kirim foto / file</h3>
 <input id="file" type="file">
-<button id="send">Kirim File</button>
+<button type="button" id="send">Kirim File</button>
 <div id="transfer" class="status">Belum ada file dikirim.</div>
 <a id="download" style="display:none" download></a>
 </div>
 </div>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script>window.peerLoaded=typeof Peer!=="undefined";</script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" onerror="window.peerLoadError=true"></script>
 <script>
-const code=document.getElementById('code'),status=document.getElementById('status');
-let peer=null,conn=null,received=[];
+(function(){
+const code=document.getElementById('code'),status=document.getElementById('status'),transfer=document.getElementById('transfer');
+let peer=null,conn=null,meta=null,parts=[];
+function msg(t){status.textContent=t}
 function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
-function setStatus(t){status.textContent=t}
-function startHost(c){
-  if(typeof Peer==='undefined'){setStatus('Library koneksi belum termuat. Muat ulang halaman lalu coba lagi.');return;}
-  if(peer) peer.destroy();
-  setStatus('Membuka jalur koneksi...');
-  peer=new Peer(c,{debug:1});
-  peer.on('open',()=>setStatus('Siap. Tunggu perangkat kedua masuk...'));
-  peer.on('connection',c2=>{
-    conn=c2;
-    conn.on('open',()=>setStatus('TERHUBUNG ✓'));
-conn.on('data',data=>handleData(data));
-    conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));
-  });
-  peer.on('error',e=>{
-    setStatus(e.type==='unavailable-id'?'Room sedang dipakai. Buat room baru.':'Koneksi gagal: '+e.type);
-  });
+function bind(c){
+ conn=c;
+ c.on('open',()=>msg('TERHUBUNG ✓'));
+ c.on('data',data=>{
+   if(data&&data.kind==='file'){meta=data;parts=[];transfer.textContent='Menerima '+data.name+'...';return}
+   if(meta&&data instanceof ArrayBuffer){
+     parts.push(data);
+     if(parts.reduce((n,x)=>n+x.byteLength,0)>=meta.size){
+       const blob=new Blob(parts,{type:meta.type||'application/octet-stream'});
+       const a=document.getElementById('download');
+       a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan '+meta.name;a.style.display='block';
+       transfer.textContent='File diterima ✓';
+       meta=null;parts=[];
+     }
+   }
+ });
+ c.on('error',e=>msg('Koneksi bermasalah: '+(e.type||'error')));
 }
-function joinRoom(c){
-  if(typeof Peer==='undefined'){setStatus('Library koneksi belum termuat. Muat ulang halaman lalu coba lagi.');return;}
-  if(peer) peer.destroy();
-  setStatus('Menghubungkan ke room...');
-  peer=new Peer(undefined,{debug:1});
-  peer.on('open',()=>{conn=peer.connect(c,{reliable:true});conn.on('open',()=>setStatus('TERHUBUNG ✓'));
-conn.on('data',data=>handleData(data));conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));});
-  peer.on('error',e=>setStatus('Koneksi gagal: '+e.type));
+function createRoom(){
+ const c=makeCode();code.textContent=c;localStorage.setItem('hd2-room',c);
+ if(typeof Peer==='undefined'){msg('Kode room dibuat. Library koneksi belum siap, muat ulang sekali.');return}
+ if(peer)peer.destroy();
+ msg('Membuka jalur koneksi...');
+ peer=new Peer(c,{debug:0});
+ peer.on('open',()=>msg('Siap. Tunggu perangkat kedua masuk...'));
+ peer.on('connection',bind);
+ peer.on('error',e=>msg(e.type==='unavailable-id'?'Room sedang dipakai. Buat room baru.':'Koneksi gagal: '+e.type));
 }
-document.getElementById('create').onclick=()=>{
-  const c=makeCode(); code.textContent=c; localStorage.setItem('hd2-room',c); startHost(c);
-};
-
-function handleData(data){
-  if(data && data.kind==='file'){
-    received=[];
-    window._fileMeta=data;
-    document.getElementById('transfer').textContent='Menerima '+data.name+'...';
-    return;
-  }
-  if(window._fileMeta && data instanceof ArrayBuffer){
-    received.push(data);
-    const blob=new Blob(received,{type:window._fileMeta.type||'application/octet-stream'});
-    const a=document.getElementById('download');
-    a.href=URL.createObjectURL(blob); a.download=window._fileMeta.name; a.textContent='⬇ Simpan '+window._fileMeta.name; a.style.display='block';
-    document.getElementById('transfer').textContent='File diterima ✓';
-  }
+function connectRoom(){
+ const c=document.getElementById('join').value.trim().toUpperCase();
+ if(c.length!==6){msg('Masukkan kode 6 karakter.');return}
+ if(typeof Peer==='undefined'){msg('Library koneksi belum siap. Muat ulang halaman.');return}
+ if(peer)peer.destroy();
+ msg('Menghubungkan ke room...');
+ peer=new Peer(undefined,{debug:0});
+ peer.on('open',()=>bind(peer.connect(c,{reliable:true})));
+ peer.on('error',e=>msg('Koneksi gagal: '+e.type));
 }
-document.getElementById('send').onclick=async()=>{
-  const f=document.getElementById('file').files[0];
-  if(!f){document.getElementById('transfer').textContent='Pilih file dulu.';return}
-  if(!conn || !conn.open){document.getElementById('transfer').textContent='Belum terhubung.';return}
-  conn.send({kind:'file',name:f.name,size:f.size,type:f.type});
-  const chunk=64*1024; let sent=0;
-  while(sent<f.size){
-    const buf=await f.slice(sent,sent+chunk).arrayBuffer();
-    conn.send(buf); sent+=buf.byteLength;
-    document.getElementById('transfer').textContent='Mengirim '+Math.round(sent/f.size*100)+'%';
-    await new Promise(requestAnimationFrame);
-  }
-  document.getElementById('transfer').textContent='File terkirim ✓';
-};
-document.getElementById('connect').onclick=()=>{
-  const c=document.getElementById('join').value.trim().toUpperCase();
-  if(c.length!==6){setStatus('Masukkan kode 6 karakter.');return}
-  joinRoom(c);
-};
+document.getElementById('create').addEventListener('click',createRoom);
+document.getElementById('connect').addEventListener('click',connectRoom);
+document.getElementById('send').addEventListener('click',async()=>{
+ const f=document.getElementById('file').files[0];
+ if(!f){transfer.textContent='Pilih foto/file dulu.';return}
+ if(!conn||!conn.open){transfer.textContent='Belum terhubung.';return}
+ conn.send({kind:'file',name:f.name,size:f.size,type:f.type});
+ const chunk=64*1024;let sent=0;
+ while(sent<f.size){
+   const buf=await f.slice(sent,sent+chunk).arrayBuffer();
+   conn.send(buf);sent+=buf.byteLength;
+   transfer.textContent='Mengirim '+Math.round(sent/f.size*100)+'%';
+   await new Promise(r=>setTimeout(r,0));
+ }
+ transfer.textContent='File terkirim ✓';
+});
+})();
 </script>
 </body>
 </html>
