@@ -6,32 +6,37 @@
 <meta http-equiv="Cache-Control" content="no-store">
 <title>Hyper Direct 2</title>
 <style>
-body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-width:560px;margin:auto;padding:24px 16px}.brand{font-size:30px;font-weight:800;color:#f26a21}.card{background:#fff;border-radius:18px;padding:18px;margin-top:14px;border:1px solid #eadfd8}button,input{width:100%;padding:13px;border-radius:12px;border:1px solid #d8ccc5;font:inherit;box-sizing:border-box}button{background:#f26a21;color:#fff;border:0;font-weight:700;margin-top:10px}.code{text-align:center;font-size:28px;font-weight:800;letter-spacing:5px;padding:12px;background:#fff3ea;border-radius:12px;margin-top:12px}.status{padding:12px;border-radius:12px;background:#f5f2ef;margin-top:12px}.small{font-size:13px;color:#756b65;line-height:1.5}.files{margin-top:10px;display:grid;gap:8px}.fileitem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fff7f0;border:1px solid #eadfd8;border-radius:10px}.fileitem a{font-weight:700;color:#f26a21;text-decoration:none;white-space:nowrap}
+*{box-sizing:border-box}body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-width:560px;margin:auto;padding:20px 14px}.brand{font-size:30px;font-weight:800;color:#f26a21}.tagline{margin:4px 0 18px}.card{background:#fff;border-radius:18px;padding:17px;margin-top:12px;border:1px solid #eadfd8}.card h3{margin:0 0 8px}.step{font-size:13px;font-weight:700;color:#756b65}.small{font-size:13px;color:#756b65;line-height:1.5}.code{text-align:center;font-size:28px;font-weight:800;letter-spacing:5px;padding:12px;background:#fff3ea;border-radius:12px;margin-top:10px}.status{padding:12px;border-radius:12px;background:#f5f2ef;margin-top:10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}button,input{width:100%;padding:13px;border-radius:12px;border:1px solid #d8ccc5;font:inherit}button{background:#f26a21;color:#fff;border:0;font-weight:700;margin-top:8px}input[type=file]{background:#fff}input[type=text]{text-transform:uppercase}.files{margin-top:10px;display:grid;gap:8px}.fileitem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fff7f0;border:1px solid #eadfd8;border-radius:10px}.fileitem span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fileitem a{font-weight:700;color:#f26a21;text-decoration:none;white-space:nowrap}
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="brand">Hyper Direct 2</div>
-<p class="small">Koneksi cepat HP ↔ laptop dan transfer foto/file.</p>
+<p class="small tagline">Kirim foto & file jarak jauh. <b>Cepat • Simple • Langsung</b></p>
+
 <div class="card">
-<h3>Buat Room</h3>
+<div class="step">1 • BUAT ROOM</div>
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
 <div id="code" class="code">------</div>
 <div id="status" class="status">Belum terhubung.</div>
+<p class="small">Bagikan 6 karakter kode di atas ke teman.</p>
 </div>
+
 <div class="card">
-<h3>Masuk ke Room</h3>
-<input id="join" maxlength="6" placeholder="Masukkan kode room" autocomplete="off">
+<div class="step">2 • MASUK ROOM</div>
+<input id="join" type="text" maxlength="6" placeholder="Kode room" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
 <button type="button" onclick="window.hdJoinRoom()">Hubungkan</button>
 </div>
+
 <div class="card">
-<h3>Kirim Foto / File</h3>
+<div class="step">3 • KIRIM FILE</div>
 <input id="file" type="file">
 <button type="button" onclick="window.hdSendFile()">Kirim File</button>
 <div id="transfer" class="status">Belum ada file dikirim.</div>
 <div id="files" class="files"></div>
 </div>
 </div>
+
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 window.hdPeer=null;window.hdConn=null;window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdWaiting=null;
