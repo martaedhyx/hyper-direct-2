@@ -25,11 +25,41 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 <div id="status" class="status">Belum terhubung.</div>
 </div>
 </div>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const code=document.getElementById('code'),status=document.getElementById('status');
+let peer=null,conn=null;
 function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
-document.getElementById('create').onclick=()=>{const c=makeCode();code.textContent=c;localStorage.setItem('hd2-room',c);status.textContent='Room dibuat. Bagikan kode ke teman.'};
-document.getElementById('connect').onclick=()=>{const c=document.getElementById('join').value.trim().toUpperCase();status.textContent=c.length===6?'Kode diterima. Menyiapkan koneksi…':'Masukkan kode 6 karakter.'};
+function setStatus(t){status.textContent=t}
+function startHost(c){
+  if(peer) peer.destroy();
+  setStatus('Membuka jalur koneksi...');
+  peer=new Peer(c,{debug:1});
+  peer.on('open',()=>setStatus('Siap. Tunggu perangkat kedua masuk...'));
+  peer.on('connection',c2=>{
+    conn=c2;
+    conn.on('open',()=>setStatus('TERHUBUNG ✓'));
+    conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));
+  });
+  peer.on('error',e=>{
+    setStatus(e.type==='unavailable-id'?'Room sedang dipakai. Buat room baru.':'Koneksi gagal: '+e.type);
+  });
+}
+function joinRoom(c){
+  if(peer) peer.destroy();
+  setStatus('Menghubungkan ke room...');
+  peer=new Peer(undefined,{debug:1});
+  peer.on('open',()=>{conn=peer.connect(c,{reliable:true});conn.on('open',()=>setStatus('TERHUBUNG ✓'));conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));});
+  peer.on('error',e=>setStatus('Koneksi gagal: '+e.type));
+}
+document.getElementById('create').onclick=()=>{
+  const c=makeCode(); code.textContent=c; localStorage.setItem('hd2-room',c); startHost(c);
+};
+document.getElementById('connect').onclick=()=>{
+  const c=document.getElementById('join').value.trim().toUpperCase();
+  if(c.length!==6){setStatus('Masukkan kode 6 karakter.');return}
+  joinRoom(c);
+};
 </script>
 </body>
 </html>
