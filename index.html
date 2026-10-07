@@ -36,42 +36,59 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" onerror="window.peerLoadError=true"></script>
 <script>
 (function(){
-const code=document.getElementById('code'),status=document.getElementById('status'),transfer=document.getElementById('transfer');
-let peer=null,conn=null,meta=null,parts=[];
+const code=document.getElementById('code');
+const status=document.getElementById('status');
+const transfer=document.getElementById('transfer');
+let peer=null,conn=null,meta=null,parts=[],receivedBytes=0;
+
 function msg(t){status.textContent=t}
 function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+
 function bind(c){
  conn=c;
  c.on('open',()=>msg('TERHUBUNG ✓'));
- c.on('data',data=>{
+ c.on('data',async data=>{
    if(data&&data.kind==='file-start'){
-     meta=data;parts=[];transfer.textContent='Menerima '+data.name+' (0%)...';return;
-   }
-   if(data&&data.kind==='file-chunk'){
-     if(!meta)return;
-     parts.push(new Uint8Array(data.data));
-     const got=parts.reduce((n,x)=>n+x.byteLength,0);
-     transfer.textContent='Menerima '+Math.min(100,Math.round(got/meta.size*100))+'%...';
-     c.send({kind:'file-ack',seq:data.seq});
+     meta=data;parts=[];receivedBytes=0;
+     const a=document.getElementById('download');
+     a.style.display='none';a.removeAttribute('href');
+     transfer.textContent='Menerima '+data.name+' (0%)...';
      return;
    }
    if(data&&data.kind==='file-end'){
      if(!meta)return;
      const blob=new Blob(parts,{type:meta.type||'application/octet-stream'});
      const a=document.getElementById('download');
-     a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan '+meta.name;a.style.display='block';
+     a.href=URL.createObjectURL(blob);
+     a.download=meta.name;
+     a.textContent='⬇ Simpan '+meta.name;
+     a.style.display='block';
      transfer.textContent='File diterima ✓';
-     meta=null;parts=[];return;
+     meta=null;parts=[];receivedBytes=0;
+     return;
    }
-   if(data&&data.kind==='file-ack' && window.waitingAck===data.seq){
-     window.waitingAck=null;
+   if(data&&data.kind==='file-ack'){
+     if(window.waitingAck===data.seq)window.waitingAck=null;
+     return;
+   }
+   if(meta && (data instanceof ArrayBuffer || ArrayBuffer.isView(data))){
+     const chunk=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);
+     parts.push(chunk.slice());
+     receivedBytes+=chunk.byteLength;
+     transfer.textContent='Menerima '+Math.min(100,Math.round(receivedBytes/meta.size*100))+'%...';
+     const seq=receivedBytes;
+     c.send({kind:'file-ack',seq:seq});
+     return;
    }
  });
  c.on('error',e=>msg('Koneksi bermasalah: '+(e.type||'error')));
+ c.on('close',()=>msg('Koneksi terputus.'));
 }
+
 function createRoom(){
- const c=makeCode();code.textContent=c;localStorage.setItem('hd2-room',c);
- if(typeof Peer==='undefined'){msg('Kode room dibuat. Library koneksi belum siap, muat ulang sekali.');return}
+ const c=makeCode();
+ code.textContent=c;
+ if(typeof Peer==='undefined'){msg('Library koneksi belum siap. Muat ulang sekali.');return}
  if(peer)peer.destroy();
  msg('Membuka jalur koneksi...');
  peer=new Peer(c,{debug:0});
@@ -79,6 +96,7 @@ function createRoom(){
  peer.on('connection',bind);
  peer.on('error',e=>msg(e.type==='unavailable-id'?'Room sedang dipakai. Buat room baru.':'Koneksi gagal: '+e.type));
 }
+
 function connectRoom(){
  const c=document.getElementById('join').value.trim().toUpperCase();
  if(c.length!==6){msg('Masukkan kode 6 karakter.');return}
@@ -86,28 +104,42 @@ function connectRoom(){
  if(peer)peer.destroy();
  msg('Menghubungkan ke room...');
  peer=new Peer(undefined,{debug:0});
- peer.on('open',()=>bind(peer.connect(c,{reliable:true})));
+ peer.on('open',()=>bind(peer.connect(c,{reliable:true,serialization:'binary'})));
  peer.on('error',e=>msg('Koneksi gagal: '+e.type));
 }
+
 document.getElementById('create').addEventListener('click',createRoom);
 document.getElementById('connect').addEventListener('click',connectRoom);
+
 document.getElementById('send').addEventListener('click',async()=>{
  const f=document.getElementById('file').files[0];
  if(!f){transfer.textContent='Pilih foto/file dulu.';return}
  if(!conn||!conn.open){transfer.textContent='Belum terhubung.';return}
+
+ const chunkSize=16*1024;
+ let sent=0,seq=0;
+ window.waitingAck=null;
+ transfer.textContent='Memulai kirim '+f.name+'...';
  conn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});
- const chunk=16*1024;let sent=0,seq=0;
+
  while(sent<f.size){
-   const buf=new Uint8Array(await f.slice(sent,sent+chunk).arrayBuffer());
+   const buf=await f.slice(sent,sent+chunkSize).arrayBuffer();
    window.waitingAck=seq;
-   conn.send({kind:'file-chunk',seq:seq,data:Array.from(buf)});
-   while(window.waitingAck===seq) await new Promise(r=>setTimeout(r,10));
-   sent+=buf.byteLength;seq++;
+   conn.send(buf);
+   const started=Date.now();
+   while(window.waitingAck===seq){
+     if(Date.now()-started>15000){
+       transfer.textContent='Pengiriman berhenti: koneksi tidak merespons.';
+       return;
+     }
+     await new Promise(r=>setTimeout(r,10));
+   }
+   sent+=buf.byteLength;
+   seq++;
    transfer.textContent='Mengirim '+Math.round(sent/f.size*100)+'%';
  }
  conn.send({kind:'file-end'});
  transfer.textContent='File terkirim ✓';
-})
 });
 })();
 </script>
