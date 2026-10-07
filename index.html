@@ -24,11 +24,18 @@ body{font-family:system-ui;margin:0;background:#fff7f0;color:#222}.wrap{max-widt
 <button id="connect">Hubungkan</button>
 <div id="status" class="status">Belum terhubung.</div>
 </div>
+<div class="card">
+<h3>Kirim foto / file</h3>
+<input id="file" type="file">
+<button id="send">Kirim File</button>
+<div id="transfer" class="status">Belum ada file dikirim.</div>
+<a id="download" style="display:none" download></a>
+</div>
 </div>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 const code=document.getElementById('code'),status=document.getElementById('status');
-let peer=null,conn=null;
+let peer=null,conn=null,received=[];
 function makeCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
 function setStatus(t){status.textContent=t}
 function startHost(c){
@@ -38,7 +45,7 @@ function startHost(c){
   peer.on('open',()=>setStatus('Siap. Tunggu perangkat kedua masuk...'));
   peer.on('connection',c2=>{
     conn=c2;
-    conn.on('open',()=>setStatus('TERHUBUNG ✓'));
+    conn.on('open',()=>setStatus('TERHUBUNG ✓'));\n    conn.on('data',data=>handleData(data));
     conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));
   });
   peer.on('error',e=>{
@@ -49,11 +56,41 @@ function joinRoom(c){
   if(peer) peer.destroy();
   setStatus('Menghubungkan ke room...');
   peer=new Peer(undefined,{debug:1});
-  peer.on('open',()=>{conn=peer.connect(c,{reliable:true});conn.on('open',()=>setStatus('TERHUBUNG ✓'));conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));});
+  peer.on('open',()=>{conn=peer.connect(c,{reliable:true});conn.on('open',()=>setStatus('TERHUBUNG ✓'));\n    conn.on('data',data=>handleData(data));conn.on('error',e=>setStatus('Koneksi bermasalah: '+e.type));});
   peer.on('error',e=>setStatus('Koneksi gagal: '+e.type));
 }
 document.getElementById('create').onclick=()=>{
   const c=makeCode(); code.textContent=c; localStorage.setItem('hd2-room',c); startHost(c);
+};
+
+function handleData(data){
+  if(data && data.kind==='file'){
+    received=[];
+    window._fileMeta=data;
+    document.getElementById('transfer').textContent='Menerima '+data.name+'...';
+    return;
+  }
+  if(window._fileMeta && data instanceof ArrayBuffer){
+    received.push(data);
+    const blob=new Blob(received,{type:window._fileMeta.type||'application/octet-stream'});
+    const a=document.getElementById('download');
+    a.href=URL.createObjectURL(blob); a.download=window._fileMeta.name; a.textContent='⬇ Simpan '+window._fileMeta.name; a.style.display='block';
+    document.getElementById('transfer').textContent='File diterima ✓';
+  }
+}
+document.getElementById('send').onclick=async()=>{
+  const f=document.getElementById('file').files[0];
+  if(!f){document.getElementById('transfer').textContent='Pilih file dulu.';return}
+  if(!conn || !conn.open){document.getElementById('transfer').textContent='Belum terhubung.';return}
+  conn.send({kind:'file',name:f.name,size:f.size,type:f.type});
+  const chunk=64*1024; let sent=0;
+  while(sent<f.size){
+    const buf=await f.slice(sent,sent+chunk).arrayBuffer();
+    conn.send(buf); sent+=buf.byteLength;
+    document.getElementById('transfer').textContent='Mengirim '+Math.round(sent/f.size*100)+'%';
+    await new Promise(requestAnimationFrame);
+  }
+  document.getElementById('transfer').textContent='File terkirim ✓';
 };
 document.getElementById('connect').onclick=()=>{
   const c=document.getElementById('join').value.trim().toUpperCase();
