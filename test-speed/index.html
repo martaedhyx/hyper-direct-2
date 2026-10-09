@@ -121,6 +121,31 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (min-width:700px){.grid3{grid-template-columns:repeat(4,1fr)}}
+/* Perbaikan tombol MULAI landing: pulihkan tampilan tombol utama HD1 */
+.landing .l-btn{
+  display:inline-flex!important;
+  width:auto!important;
+  min-width:148px;
+  min-height:50px;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:15px 38px;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(135deg,#22d3ee,#2563eb);
+  color:#061322;
+  font-weight:800;
+  font-size:15px;
+  letter-spacing:.18em;
+  line-height:1.2;
+  white-space:nowrap;
+  box-shadow:0 12px 34px -10px rgba(34,211,238,.78);
+  opacity:1;
+  visibility:visible;
+}
+.landing .l-btn svg{display:block;flex:0 0 18px;width:18px;height:18px}
+.landing .l-btn:active{transform:scale(.96);background:linear-gradient(135deg,#67e8f9,#3b82f6);color:#061322}
 </style>
 </head>
 <body>
