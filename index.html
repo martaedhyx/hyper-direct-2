@@ -10,7 +10,7 @@
 *{box-sizing:border-box}
 body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:radial-gradient(ellipse at 50% -10%,#123e68 0%,#09182b 42%,var(--bg) 78%);background-attachment:fixed;color:var(--white);min-height:100vh}
 .wrap{max-width:620px;margin:auto;padding:28px 16px 40px}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}.mascot{width:48px;height:48px;flex:none;filter:drop-shadow(0 3px 6px #0008) drop-shadow(0 0 8px #39e7ff22)}.mascot svg{width:100%;height:100%;display:block;overflow:visible}.brand-title{font-size:clamp(27px,7vw,36px);font-weight:900;letter-spacing:-1.1px;line-height:1.1;background:linear-gradient(90deg,#f3fdff 0%,var(--cyan) 48%,#78aaff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 28px #39e7ff22}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.mascot{width:48px;height:48px;flex:none;filter:drop-shadow(0 3px 6px #0008) drop-shadow(0 0 8px #39e7ff22)}.mascot svg{width:100%;height:100%;display:block;overflow:visible}.mascot svg g.hd-eye rect{transition:x .12s ease,y .12s ease,height .09s ease}.brand-title{font-size:clamp(27px,7vw,36px);font-weight:900;letter-spacing:-1.1px;line-height:1.1;background:linear-gradient(90deg,#f3fdff 0%,var(--cyan) 48%,#78aaff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 28px #39e7ff22}
 .tagline{margin:7px 0 24px;color:var(--muted);font-size:14px;line-height:1.65}
 .card{position:relative;overflow:hidden;background:linear-gradient(145deg,#10233bea,#09172bed);border-radius:20px;padding:19px;margin-top:14px;border:1px solid var(--line);box-shadow:0 12px 35px #00000030}
 .card:before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--blue),transparent);opacity:.8}
@@ -86,6 +86,32 @@ input[type=text]{text-transform:uppercase}
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
+/* Hyper Direct mascot: mata mengikuti pointer dan berkedip */ 
+(function(){
+  var svg=document.querySelector('.mascot svg');
+  if(!svg)return;
+  var eyes=Array.from(svg.querySelectorAll('g rect'));
+  if(eyes.length<2)return;
+  var bases=eyes.map(function(el){return {el:el,x:parseFloat(el.getAttribute('x')),y:parseFloat(el.getAttribute('y')),h:parseFloat(el.getAttribute('height'))};});
+  window.addEventListener('pointermove',function(ev){
+    var r=svg.getBoundingClientRect();
+    var px=((ev.clientX-r.left)/r.width-.5)*2;
+    var py=((ev.clientY-r.top)/r.height-.5)*2;
+    bases.forEach(function(b){b.el.setAttribute('x',(b.x+Math.max(-1,Math.min(1,px))*2.1).toFixed(2));b.el.setAttribute('y',(b.y+Math.max(-1,Math.min(1,py))*1.8).toFixed(2));});
+  },{passive:true});
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    function blink(){
+      bases.forEach(function(b){b.el.setAttribute('height','2');b.el.setAttribute('y',(parseFloat(b.el.getAttribute('y'))+b.h-2).toFixed(2));});
+      window.setTimeout(function(){bases.forEach(function(b){b.el.setAttribute('height',String(b.h));b.el.setAttribute('y',(b.y+Math.max(-1,Math.min(1,((window.innerHeight/2)-b.y)/window.innerHeight))*0).toFixed(2));});},130);
+    }
+    function restore(){bases.forEach(function(b){b.el.setAttribute('height',String(b.h));});}
+    window.setInterval(function(){
+      var ys=bases.map(function(b){return parseFloat(b.el.getAttribute('y'));});
+      bases.forEach(function(b,i){b.el.setAttribute('height','2');b.el.setAttribute('y',(ys[i]+b.h-2).toFixed(2));});
+      window.setTimeout(function(){bases.forEach(function(b,i){b.el.setAttribute('height',String(b.h));b.el.setAttribute('y',ys[i].toFixed(2));});},135);
+    },3600);
+  }
+})();
 window.hdPeer=null;window.hdConn=null;window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdWaiting=null;
 function hdStatus(t){document.getElementById('status').textContent=t}
 function hdTransfer(t){document.getElementById('transfer').textContent=t}
