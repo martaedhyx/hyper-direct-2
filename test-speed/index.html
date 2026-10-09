@@ -34,7 +34,7 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
 .card h3{margin:0 0 8px}
 .step{font-size:11px;font-weight:800;letter-spacing:1.6px;color:var(--cyan)}
 .small{font-size:13px;color:var(--muted);line-height:1.65}
-.qr-box{display:grid;justify-items:center;gap:8px;margin-top:12px}.qr-code{background:#fff;padding:10px;border-radius:12px;min-width:180px;min-height:180px;display:grid;place-items:center}.qr-code img,.qr-code canvas{max-width:100%;height:auto!important}.qr-scanner{display:none;margin-top:12px;overflow:hidden;border:1px solid #27506d;border-radius:12px;background:#071629}.qr-scanner.active{display:block}.qr-hint{font-size:12px;color:var(--muted);text-align:center;line-height:1.5}
+
 .code{text-align:center;font-size:clamp(27px,7vw,34px);font-weight:900;letter-spacing:7px;padding:16px 12px;background:linear-gradient(135deg,#071628,#102b46);border:1px solid #246486;border-radius:15px;margin-top:13px;color:#a5f6ff;text-shadow:0 0 18px #39e7ff55;box-shadow:inset 0 0 22px #39e7ff0b}
 .status{padding:13px 14px;border-radius:13px;background:#081729;border:1px solid #193b56;margin-top:12px;color:#d3eaf7;font-size:14px;line-height:1.55;overflow-wrap:anywhere}
 .status.connected{color:#8dffb0;background:rgba(25,255,112,.10);border:1px solid #39ff83;box-shadow:0 0 10px rgba(35,255,112,.22),inset 0 0 12px rgba(35,255,112,.06);font-weight:800;text-shadow:0 0 8px rgba(57,255,131,.28)}
@@ -145,7 +145,7 @@ input[type=text]{text-transform:uppercase}
 <div class="step">1 • BUAT ROOM</div>
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
 <div id="code" class="code">------</div>
-<div class="qr-box"><div id="qrcode" class="qr-code" aria-label="QR kode room"><span style="color:#123">QR akan muncul setelah room dibuat</span></div><div class="qr-hint">Pindai QR ini dari HP kedua untuk mengisi kode room otomatis.</div><button type="button" onclick="window.hdCopyRoomCode()">Salin Kode Room</button></div>
+<button type="button" onclick="window.hdCopyRoomCode()">Salin Kode Room</button>
 <div id="status" class="status">Belum terhubung.</div>
 <p class="small">Bagikan 6 karakter kode di atas ke teman.</p>
 </div>
@@ -154,9 +154,7 @@ input[type=text]{text-transform:uppercase}
 <div class="step">2 • MASUK ROOM</div>
 <input id="join" type="text" maxlength="6" placeholder="Kode room" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
 <button type="button" onclick="window.hdJoinRoom()">Masuk Room</button>
-<button type="button" onclick="window.hdToggleScanner()">Pindai QR</button>
-<div id="qrScanner" class="qr-scanner"><div id="qrReader"></div></div>
-<p class="small">Izinkan akses kamera saat diminta. Jika tidak bisa memindai, masukkan kode secara manual.</p>
+<p class="small">Masukkan 6 karakter kode room dari perangkat pengirim.</p>
 </div>
 
 <div class="card send-card">
@@ -170,8 +168,6 @@ input[type=text]{text-transform:uppercase}
 </div>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 /* Hyper Direct mascot: mata mengikuti pointer dan berkedip */ 
 (function(){
@@ -200,14 +196,7 @@ input[type=text]{text-transform:uppercase}
   }
 })();
 
-// QR room helpers for easier phone-to-phone testing.
-var hdQrScanner=null,hdQrStarting=false;
-function hdRoomUrl(code){var u=new URL(window.location.href);u.search='';u.hash='';u.searchParams.set('room',code);return u.toString()}function hdRenderQR(code){var box=document.getElementById('qrcode');if(!box)return;box.innerHTML='';var url=hdRoomUrl(code);function fallback(){box.innerHTML='';var img=document.createElement('img');img.alt='QR room '+code;img.width=240;img.height=240;img.style.width='240px';img.style.height='240px';img.style.maxWidth='100%';img.referrerPolicy='no-referrer';img.src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=12&data='+encodeURIComponent(url);img.onerror=function(){box.innerHTML='<span style="color:#123;text-align:center;padding:12px">QR gagal dimuat. Gunakan kode room di bawah secara manual.</span>'};box.appendChild(img)}if(typeof QRCode==='undefined'){fallback();return}try{new QRCode(box,{text:url,width:240,height:240,colorDark:'#071629',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});setTimeout(function(){if(!box.querySelector('canvas')&&!box.querySelector('img'))fallback()},800)}catch(e){fallback()}}
 window.hdCopyRoomCode=function(){var code=(document.getElementById('code').textContent||'').trim();if(!/^[A-Z0-9]{6}$/.test(code)){hdStatus('Buat room terlebih dahulu.');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(function(){hdStatus('Kode room disalin: '+code)}).catch(function(){hdStatus('Kode room: '+code)})}else{hdStatus('Kode room: '+code)}};
-window.hdToggleScanner=async function(){var panel=document.getElementById('qrScanner');if(panel.classList.contains('active')){await hdStopScanner();return}if(!window.isSecureContext){hdStatus('Pemindai QR memerlukan HTTPS.');return}if(typeof Html5Qrcode==='undefined'){hdStatus('Fitur pemindai belum termuat. Muat ulang halaman.');return}panel.classList.add('active');if(hdQrStarting)return;hdQrStarting=true;try{hdQrScanner=new Html5Qrcode('qrReader');await hdQrScanner.start({facingMode:'environment'},{fps:10,qrbox:{width:220,height:220}},async function(decoded){var raw=String(decoded||'').trim(),code=raw.toUpperCase();try{var parsed=new URL(raw);var fromUrl=parsed.searchParams.get('room');if(fromUrl)code=fromUrl.trim().toUpperCase()}catch(e){}if(/^[A-Z0-9]{6}$/.test(code)){document.getElementById('join').value=code;hdStatus('Kode QR terbaca: '+code+'. Tekan Masuk Room.');await hdStopScanner()}},function(){});}catch(e){panel.classList.remove('active');hdStatus('Kamera tidak tersedia. Izinkan akses kamera atau masukkan kode manual.')}finally{hdQrStarting=false}};
-async function hdStopScanner(){var panel=document.getElementById('qrScanner');if(hdQrScanner){try{if(hdQrScanner.isScanning)await hdQrScanner.stop();hdQrScanner.clear()}catch(e){}hdQrScanner=null}panel.classList.remove('active')}
-
-(function(){try{var p=new URLSearchParams(window.location.search).get('room');if(p&&/^[a-z0-9]{6}$/i.test(p)){document.getElementById('join').value=p.toUpperCase();hdStatus('Kode room dari QR siap. Tekan Masuk Room.')}}catch(e){}})();
 window.hdPeer=null;window.hdConn=null;window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdWaiting=null;
 function hdStatus(t){var el=document.getElementById('status');var connected=/terhubung/i.test(t)&&!/belum terhubung/i.test(t)&&!/tidak terhubung/i.test(t)&&!/terputus/i.test(t);el.classList.toggle('connected',connected);el.textContent=String(t).replace(/^TERHUBUNG\s*✓?$/i,'TERHUBUNG')}
 function hdTransfer(t){document.getElementById('transfer').textContent=t}
@@ -221,7 +210,7 @@ var hdIceServers=[
  {urls:"turn:global.relay.metered.ca:443",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
  {urls:"turns:global.relay.metered.ca:443?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"}
 ];
-window.hdCreateRoom=function(){var c=hdCode();document.getElementById('code').textContent=c;hdRenderQR(c);hdStatus('Membuka room...');if(typeof Peer==='undefined'){hdStatus('Kode sudah dibuat. Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}window.hdPeer=new Peer(c,{debug:0,config:{iceServers:hdIceServers}});window.hdPeer.on('open',function(){hdStatus('Room siap. Tunggu perangkat kedua...')});window.hdPeer.on('connection',hdBind);window.hdPeer.on('error',function(e){hdStatus('Room gagal: '+(e.type||'error'))})};
+window.hdCreateRoom=function(){var c=hdCode();document.getElementById('code').textContent=c;hdStatus('Membuka room...');if(typeof Peer==='undefined'){hdStatus('Kode sudah dibuat. Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}window.hdPeer=new Peer(c,{debug:0,config:{iceServers:hdIceServers}});window.hdPeer.on('open',function(){hdStatus('Room siap. Tunggu perangkat kedua...')});window.hdPeer.on('connection',hdBind);window.hdPeer.on('error',function(e){hdStatus('Room gagal: '+(e.type||'error'))})};
 window.hdJoinRoom=function(){var c=document.getElementById('join').value.trim().toUpperCase();if(c.length!==6){hdStatus('Masukkan kode 6 karakter.');return}if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}hdStatus('Menghubungkan...');window.hdPeer=new Peer(undefined,{debug:0,config:{iceServers:hdIceServers}});window.hdPeer.on('open',function(){window.hdConn=window.hdPeer.connect(c,{reliable:true});hdBind(window.hdConn)});window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'))})};
 function hdBind(c){window.hdConn=c;c.on('open',function(){hdStatus('TERHUBUNG ✓')});c.on('close',function(){hdStatus('Koneksi terputus.')});c.on('error',function(){hdStatus('Koneksi bermasalah.')});c.on('data',function(data){if(data&&data.kind==='file-start'){window.hdMeta=data;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0;hdTransfer('Menerima '+data.name+' (0%)...');return}if(data&&data.kind==='ack'){window.hdWaiting=Math.max(window.hdWaiting||0,data.n);return}if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);window.hdParts.push(u.slice());window.hdReceived+=u.byteLength;hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...');if(window.hdReceived-window.hdLastAck>=1048576||window.hdReceived>=window.hdMeta.size){window.hdLastAck=window.hdReceived;c.send({kind:'ack',n:window.hdReceived})}return}if(data&&data.kind==='file-end'&&window.hdMeta){var meta=window.hdMeta;var blob=new Blob(window.hdParts,{type:meta.type||'application/octet-stream'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan';var item=document.createElement('div');item.className='fileitem';var label=document.createElement('span');label.textContent=meta.name;item.appendChild(label);item.appendChild(a);document.getElementById('files').prepend(item);hdTransfer('File diterima ✓');window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0}})}
 window.hdSendFile=async function(){var f=document.getElementById('file').files[0];if(!f){hdTransfer('Pilih foto/file dulu.');return}if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return}var conn=window.hdConn;var chunkSize=65536,highWater=8*1048576;conn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});var pos=0;while(pos<f.size){if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}var dc=conn.dataChannel;if(dc&&dc.bufferedAmount>highWater){await new Promise(function(r){setTimeout(r,15)});continue}var end=Math.min(pos+chunkSize,f.size);var b=await f.slice(pos,end).arrayBuffer();if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}conn.send(b);pos+=b.byteLength;hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'% · '+(pos/1048576).toFixed(1)+' / '+(f.size/1048576).toFixed(1)+' MB')}conn.send({kind:'file-end'});hdTransfer('File terkirim ✓')};
