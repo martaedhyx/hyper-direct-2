@@ -150,7 +150,7 @@ input[type=text]{text-transform:uppercase}
 
 <div class="card">
 <div class="step">2 • MASUK ROOM</div>
-<input id="join" type="text" maxlength="3" inputmode="numeric" pattern="[0-9]{3}" placeholder="Kode 3 digit" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,3)">
+<input id="join" type="text" maxlength="3" inputmode="numeric" pattern="[0-9]{3}" placeholder="Kode 3 digit" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)">
 <button type="button" onclick="window.hdJoinRoom()">Masuk Room</button>
 </div>
 
