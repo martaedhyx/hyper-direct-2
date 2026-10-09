@@ -197,7 +197,7 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
     if(!ctx||!L.isConnected||L.style.display==='none')return;
     var dt=Math.min(.05,last?(t-last)/1000:.016);last=t;ctx.clearRect(0,0,w,h);
     for(var i=0;i<stars.length;i++){
-      var s=stars[i],prev=s.z;s.z-=.045*dt*60;
+      var s=stars[i],prev=s.z;s.z-=.045*dt;
       if(s.z<=.03){stars[i]=newStar(false);continue}
       var q=proj(s,s.z);if(q[0]<-40||q[0]>w+40||q[1]<-40||q[1]>h+40){stars[i]=newStar(false);continue}
       var near=1-s.z,a=Math.min(1,near*1.2+.4)*Math.min(1,near/.08);
