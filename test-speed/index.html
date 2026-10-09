@@ -240,7 +240,21 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
    var eyes=document.querySelectorAll('#lEyes rect'), mascot=document.querySelector('.l-mascot'), last=0;
   function blink(){if(!L.classList.contains('out')&&eyes.length){eyes.forEach(function(e){e.style.transformOrigin='center';e.style.transform='scaleY(.12)';});setTimeout(function(){eyes.forEach(function(e){e.style.transform='';});},130);}last=setTimeout(blink,2200+Math.random()*2500);}
   if(!reduced)last=setTimeout(blink,1800);
-  L.addEventListener('pointermove',function(e){if(!mascot||!eyes.length||reduced)return;var r=mascot.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);eyes.forEach(function(el){el.style.transform='translate('+Math.max(-2,Math.min(2,dx/65))+'px,'+Math.max(-2,Math.min(2,dy/65))+'px)';});},{passive:true});
+  var mascotHome=null;
+  if(mascot){mascot.style.transition='translate 45ms linear, rotate 55ms linear';mascot.style.willChange='translate, rotate';}
+  L.addEventListener('pointermove',function(e){
+    if(!mascot||!eyes.length||reduced||L.classList.contains('out'))return;
+    if(!mascotHome){var mr=mascot.getBoundingClientRect();mascotHome={x:mr.left+mr.width/2,y:mr.top+mr.height/2};}
+    var dx=e.clientX-mascotHome.x,dy=e.clientY-mascotHome.y;
+    var mx=Math.max(-42,Math.min(42,dx*.19)),my=Math.max(-38,Math.min(38,dy*.17));
+    mascot.style.translate=mx.toFixed(1)+'px '+my.toFixed(1)+'px';
+    mascot.style.rotate=Math.max(-12,Math.min(12,dx*.045)).toFixed(1)+'deg';
+    eyes.forEach(function(el){el.style.transform='translate('+Math.max(-5,Math.min(5,dx/28)).toFixed(1)+'px,'+Math.max(-5,Math.min(5,dy/28)).toFixed(1)+'px)';});
+  },{passive:true});
+  L.addEventListener('pointerleave',function(){
+    if(mascot){mascot.style.translate='0px 0px';mascot.style.rotate='0deg';}
+    eyes.forEach(function(el){el.style.transform='';});
+  },{passive:true});
   var btn=document.getElementById('startBtn');if(btn)btn.addEventListener('click',function(){L.classList.add('out');setTimeout(function(){L.style.display='none';if(raf)cancelAnimationFrame(raf);clearTimeout(last);},460);});
 })();
 </script>
