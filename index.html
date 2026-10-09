@@ -143,14 +143,14 @@ input[type=text]{text-transform:uppercase}
 <div class="card">
 <div class="step">1 • BUAT ROOM</div>
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
-<div id="code" class="code">------</div>
+<div id="code" class="code">---</div>
 <div id="status" class="status">Belum terhubung.</div>
-<p class="small">Bagikan 6 karakter kode di atas ke teman.</p>
+<p class="small">Bagikan kode room 3 digit di atas ke teman.</p>
 </div>
 
 <div class="card">
 <div class="step">2 • MASUK ROOM</div>
-<input id="join" type="text" maxlength="6" placeholder="Kode room" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.toUpperCase()">
+<input id="join" type="text" maxlength="3" inputmode="numeric" pattern="[0-9]{3}" placeholder="Kode 3 digit" autocomplete="off" autocapitalize="characters" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,3)">
 <button type="button" onclick="window.hdJoinRoom()">Masuk Room</button>
 </div>
 
@@ -195,9 +195,9 @@ input[type=text]{text-transform:uppercase}
 window.hdPeer=null;window.hdConn=null;window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdWaiting=null;
 function hdStatus(t){var el=document.getElementById('status');var connected=/terhubung/i.test(t)&&!/belum terhubung/i.test(t)&&!/tidak terhubung/i.test(t)&&!/terputus/i.test(t);el.classList.toggle('connected',connected);el.textContent=String(t).replace(/^TERHUBUNG\s*✓?$/i,'TERHUBUNG')}
 function hdTransfer(t){document.getElementById('transfer').textContent=t}
-function hdCode(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function hdCode(){return String(Math.floor(Math.random()*1000)).padStart(3,'0')}
 window.hdCreateRoom=function(){var c=hdCode();document.getElementById('code').textContent=c;hdStatus('Membuka room...');if(typeof Peer==='undefined'){hdStatus('Kode sudah dibuat. Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}window.hdPeer=new Peer(c,{debug:0});window.hdPeer.on('open',function(){hdStatus('Room siap. Tunggu perangkat kedua...')});window.hdPeer.on('connection',hdBind);window.hdPeer.on('error',function(e){hdStatus('Room gagal: '+(e.type||'error'))})};
-window.hdJoinRoom=function(){var c=document.getElementById('join').value.trim().toUpperCase();if(c.length!==6){hdStatus('Masukkan kode 6 karakter.');return}if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}hdStatus('Menghubungkan...');window.hdPeer=new Peer(undefined,{debug:0});window.hdPeer.on('open',function(){window.hdConn=window.hdPeer.connect(c,{reliable:true});hdBind(window.hdConn)});window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'))})};
+window.hdJoinRoom=function(){var c=document.getElementById('join').value.trim().toUpperCase();if(!/^\d{3}$/.test(c)){hdStatus('Masukkan kode room 3 digit.');return}if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}hdStatus('Menghubungkan...');window.hdPeer=new Peer(undefined,{debug:0});window.hdPeer.on('open',function(){window.hdConn=window.hdPeer.connect(c,{reliable:true});hdBind(window.hdConn)});window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'))})};
 function hdBind(c){window.hdConn=c;c.on('open',function(){hdStatus('TERHUBUNG ✓')});c.on('close',function(){hdStatus('Koneksi terputus.')});c.on('error',function(){hdStatus('Koneksi bermasalah.')});c.on('data',function(data){if(data&&data.kind==='file-start'){window.hdMeta=data;window.hdParts=[];window.hdReceived=0;hdTransfer('Menerima '+data.name+' (0%)...');return}if(data&&data.kind==='ack'){window.hdWaiting=Math.max(window.hdWaiting||0,data.n);return}if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);window.hdParts.push(u.slice());window.hdReceived+=u.byteLength;hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...');c.send({kind:'ack',n:window.hdReceived});return}if(data&&data.kind==='file-end'&&window.hdMeta){var meta=window.hdMeta;var blob=new Blob(window.hdParts,{type:meta.type||'application/octet-stream'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=meta.name;a.textContent='⬇ Simpan';var item=document.createElement('div');item.className='fileitem';var label=document.createElement('span');label.textContent=meta.name;item.appendChild(label);item.appendChild(a);document.getElementById('files').prepend(item);hdTransfer('File diterima ✓');window.hdMeta=null;window.hdParts=[];window.hdReceived=0}})}
 window.hdSendFile=async function(){var f=document.getElementById('file').files[0];if(!f){hdTransfer('Pilih foto/file dulu.');return}if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return}window.hdWaiting=0;window.hdConn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});var pos=0,size=1048576,windowBytes=4*size;while(pos<f.size){var batchEnd=Math.min(pos+windowBytes,f.size);while(pos<batchEnd){var b=await f.slice(pos,Math.min(pos+size,batchEnd)).arrayBuffer();window.hdConn.send(b);pos+=b.byteLength;hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'%')}var start=Date.now();while((window.hdWaiting||0)<batchEnd){if(Date.now()-start>15000){hdTransfer('Koneksi berhenti merespons.');return}await new Promise(function(r){setTimeout(r,10)})}}window.hdConn.send({kind:'file-end'});hdTransfer('File terkirim ✓')};
 </script>
