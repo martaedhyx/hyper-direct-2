@@ -79,7 +79,7 @@ input[type=text]{text-transform:uppercase}
 .l-flash{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.95) 0%,rgba(165,243,252,.55) 22%,rgba(14,116,144,0) 62%)}
 .l-mascot{position:relative;width:clamp(106px,32vw,147px);height:clamp(106px,32vw,147px);animation:lfloat 4.2s ease-in-out infinite;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(34,211,238,.25))}
 .l-mascot svg{width:100%;height:100%;display:block;overflow:visible}
-.l-mascot .m-eye{transform-box:fill-box;transform-origin:center;animation:blink 4.2s infinite}.l-mascot svg{filter:drop-shadow(0 0 12px #39e7ff22)}
+.l-mascot .l-eye{transform-box:fill-box;transform-origin:center;animation:hdLandingBlink 4.2s infinite}.l-mascot .l-eye-wrap{transition:transform .12s ease-out}.l-mascot svg{filter:drop-shadow(0 0 12px #39e7ff22)}@keyframes hdLandingBlink{0%,45%,48%,100%{transform:scaleY(1)}46.5%{transform:scaleY(.08)}}
 @keyframes lfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .l-shadow{width:clamp(72px,22vw,104px);height:12px;margin:10px auto 0;border-radius:50%;background:rgba(34,211,238,.35);filter:blur(7px);animation:lshadow 4.2s ease-in-out infinite}
 @keyframes lshadow{0%,100%{transform:scaleX(1);opacity:.65}50%{transform:scaleX(.7);opacity:.32}}
@@ -139,22 +139,21 @@ input[type=text]{text-transform:uppercase}
 
 <section class="landing" id="landing" aria-label="Hyper Direct">
   <div class="stars"></div><div class="stars2"></div><canvas class="l-canvas" id="lCanvas" aria-hidden="true"></canvas><div class="l-glow"></div><div class="l-flash" aria-hidden="true"></div>
-  <div class="l-mascot" role="img" aria-label="Maskot futuristik Hyper Direct">
-    <svg viewBox="0 0 100 100" focusable="false">
+  <div class="l-mascot" role="img" aria-label="Maskot asli Hyper Direct">
+    <svg viewBox="0 0 100 100" focusable="false" aria-hidden="true">
       <defs>
-        <radialGradient id="mg2" cx="32%" cy="22%" r="82%"><stop offset="0" stop-color="#344b66"/><stop offset=".42" stop-color="#14243a"/><stop offset="1" stop-color="#050a13"/></radialGradient>
-        <linearGradient id="mRing" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7df5ff"/><stop offset=".52" stop-color="#278cff"/><stop offset="1" stop-color="#9b7cff"/></linearGradient>
-        <clipPath id="mc2"><circle cx="50" cy="50" r="46"/></clipPath>
+        <radialGradient id="landingMascotGradient" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#eef1f6"/><stop offset=".82" stop-color="#cfd5de"/><stop offset="1" stop-color="#aeb6c2"/></radialGradient>
+        <clipPath id="landingMascotClip"><circle cx="50" cy="50" r="47.5"/></clipPath>
       </defs>
-      <circle cx="50" cy="50" r="48" fill="url(#mg2)" stroke="url(#mRing)" stroke-width="2.5"/>
-      <ellipse cx="35" cy="19" rx="19" ry="7" fill="#b9f8ff" opacity=".12" transform="rotate(-25 35 19)"/>
-      <circle cx="50" cy="50" r="37" fill="none" stroke="#5eeaff" stroke-opacity=".23" stroke-width="1.4" stroke-dasharray="22 10 7 12" transform="rotate(-28 50 50)"/>
-      <g clip-path="url(#mc2)">
-        <path d="M17 53 Q50 20 83 53" fill="none" stroke="#4deaff" stroke-opacity=".24" stroke-width="2"/>
-        <g id="lEyes"><g><rect class="m-eye" x="29" y="37" width="12" height="23" rx="6" fill="#8ffaff"/></g><g><rect class="m-eye" x="59" y="37" width="12" height="23" rx="6" fill="#8ffaff"/></g></g>
-        <path d="M39 70 Q50 76 61 70" fill="none" stroke="#55eaff" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+      <circle cx="50" cy="50" r="49" fill="url(#landingMascotGradient)"/>
+      <circle cx="50" cy="50" r="48.4" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="1.2"/>
+      <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
+      <g clip-path="url(#landingMascotClip)">
+        <ellipse cx="53" cy="47" rx="6" ry="3.2" fill="#ff8fb1" opacity=".5" transform="rotate(-25 53 47)"/>
+        <ellipse cx="86" cy="42" rx="5" ry="2.8" fill="#ff8fb1" opacity=".5" transform="rotate(-25 86 42)"/>
+        <g class="l-eye-wrap"><g transform="rotate(-25 60 30.5)"><rect class="l-eye" x="55" y="21" width="10" height="19" rx="5" fill="#111318"/></g></g>
+        <g class="l-eye-wrap"><g transform="rotate(-25 80 26.5)"><rect class="l-eye" x="75.75" y="17.5" width="8.5" height="18" rx="4.25" fill="#111318"/></g></g>
       </g>
-      <circle cx="50" cy="50" r="47" fill="none" stroke="#d9fdff" stroke-opacity=".22"/>
     </svg>
   </div>
   <div class="l-shadow"></div>
@@ -167,6 +166,19 @@ input[type=text]{text-transform:uppercase}
 (function(){
   var b=document.getElementById('startBtn'),l=document.getElementById('landing');
   if(b&&l)b.addEventListener('click',function(){l.classList.add('out');window.setTimeout(function(){l.style.display='none';},460);});
+})();
+(function(){
+  var mascot=document.querySelector('.l-mascot');
+  if(!mascot)return;
+  var eyes=Array.from(mascot.querySelectorAll('.l-eye-wrap'));
+  function moveEyes(x,y){
+    var r=mascot.getBoundingClientRect();
+    var dx=Math.max(-1,Math.min(1,((x-r.left)/r.width-.5)*2))*2.4;
+    var dy=Math.max(-1,Math.min(1,((y-r.top)/r.height-.5)*2))*2.0;
+    eyes.forEach(function(eye){eye.setAttribute('transform','translate('+dx.toFixed(2)+' '+dy.toFixed(2)+')');});
+  }
+  window.addEventListener('pointermove',function(e){moveEyes(e.clientX,e.clientY);},{passive:true});
+  window.addEventListener('pointerleave',function(){eyes.forEach(function(eye){eye.removeAttribute('transform');});},{passive:true});
 })();
 </script>
 
