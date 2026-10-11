@@ -18,7 +18,7 @@
 *{box-sizing:border-box}
 body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:radial-gradient(ellipse at 50% -10%,#123e68 0%,#09182b 42%,var(--bg) 78%);background-attachment:fixed;color:var(--white);min-height:100vh}
 .wrap{max-width:620px;margin:auto;padding:28px 16px 40px}
-.brand{display:flex;align-items:center;gap:12px;min-width:0}.mascot{width:48px;height:48px;flex:none;filter:drop-shadow(0 3px 6px #0008) drop-shadow(0 0 11px #39e7ff42);animation:hdBotFloat 4.2s ease-in-out infinite}.mascot svg{transform-origin:50% 50%;animation:hdBotTurn 8s ease-in-out infinite}.mascot:hover{filter:drop-shadow(0 3px 6px #0008) drop-shadow(0 0 16px #39e7ff88)}@keyframes hdBotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes hdBotTurn{0%,100%{rotate:0deg}35%{rotate:-3deg}68%{rotate:3deg}}.mascot svg{width:100%;height:100%;display:block;overflow:visible}.mascot .m-eye{transform-box:fill-box;transform-origin:center;animation:hdOriginalBlink 5.2s infinite}.mascot .m-orbit{transform-origin:50px 50px;animation:hdOrbitSpin 12s linear infinite}@keyframes hdOrbitSpin{to{transform:rotate(360deg)}}@keyframes hdOriginalBlink{0%,43%,46%,100%{transform:scaleY(1)}44.5%{transform:scaleY(.08)}}.brand-title{font-size:clamp(27px,7vw,36px);font-weight:900;letter-spacing:-1.1px;line-height:1.1;background:linear-gradient(90deg,#f3fdff 0%,var(--cyan) 48%,#78aaff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 28px #39e7ff22}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.mascot{width:48px;height:48px;flex:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(34,211,238,.18));animation:float 5s ease-in-out infinite}.mascot svg{width:100%;height:100%;display:block;overflow:visible}.mascot .m-eye{transform-box:fill-box;transform-origin:center;animation:blink 4.6s infinite}@keyframes blink{0%,91%,97%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}.brand-title{font-size:clamp(27px,7vw,36px);font-weight:900;letter-spacing:-1.1px;line-height:1.1;background:linear-gradient(90deg,#f3fdff 0%,var(--cyan) 48%,#78aaff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 28px #39e7ff22}
 .tagline{margin:7px 0 24px;color:var(--muted);font-size:14px;line-height:1.65}
 .card{position:relative;overflow:hidden;background:linear-gradient(145deg,#10233bea,#09172bed);border-radius:20px;padding:19px;margin-top:14px;border:1px solid var(--line);box-shadow:0 12px 35px #00000030}
 .menu-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch;margin-top:14px}
@@ -192,20 +192,17 @@ input[type=text]{text-transform:uppercase}
   <div class="mascot" aria-hidden="true">
         <svg viewBox="0 0 100 100" focusable="false">
           <defs>
-            <radialGradient id="mg1" cx="32%" cy="22%" r="82%"><stop offset="0" stop-color="#425064"/><stop offset=".42" stop-color="#172235"/><stop offset=".78" stop-color="#08111f"/><stop offset="1" stop-color="#030711"/></radialGradient>
-            <linearGradient id="mgRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9fbff"/><stop offset=".48" stop-color="#39e7ff"/><stop offset="1" stop-color="#7c83ff"/></linearGradient>
-            <clipPath id="mc1"><circle cx="50" cy="50" r="44.5"/></clipPath>
+            <radialGradient id="mg1" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#eef1f6"/><stop offset=".82" stop-color="#cfd5de"/><stop offset="1" stop-color="#aeb6c2"/></radialGradient>
+            <clipPath id="mc1"><circle cx="50" cy="50" r="47.5"/></clipPath>
           </defs>
-          <circle class="m-orbit" cx="50" cy="50" r="48" fill="none" stroke="url(#mgRing)" stroke-width="2.4" stroke-dasharray="53 11 18 9" opacity=".95"/>
-          <circle cx="50" cy="50" r="44.5" fill="url(#mg1)" stroke="#73eaff" stroke-opacity=".7" stroke-width="1.1"/>
-          <ellipse cx="30" cy="22" rx="13" ry="5.5" fill="#b8f7ff" opacity=".23" transform="rotate(-35 30 22)"/>
+          <circle cx="50" cy="50" r="49" fill="url(#mg1)"/>
+          <circle cx="50" cy="50" r="48.4" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="1.2"/>
+          <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
           <g clip-path="url(#mc1)">
-            <path d="M17 65 Q50 82 83 62" fill="none" stroke="#39e7ff" stroke-width="1.2" opacity=".3"/>
-            <ellipse cx="61" cy="34" rx="8" ry="11" fill="#030914" stroke="#48eaff" stroke-width="1.1"/>
-            <ellipse cx="79" cy="29" rx="6.7" ry="9.5" fill="#030914" stroke="#48eaff" stroke-width="1.1"/>
-            <g transform="rotate(-18 61 34)"><rect class="m-eye" x="57" y="25" width="7.5" height="17" rx="3.75" fill="#f2fdff" filter="drop-shadow(0 0 4px #39e7ff)"/></g>
-            <g transform="rotate(-18 79 29)"><rect class="m-eye" x="75.8" y="21" width="6.5" height="15" rx="3.25" fill="#f2fdff" filter="drop-shadow(0 0 4px #39e7ff)"/></g>
-            <circle cx="23" cy="58" r="2" fill="#39e7ff"/><circle cx="87" cy="52" r="1.6" fill="#7c83ff"/>
+            <ellipse cx="53" cy="47" rx="6" ry="3.2" fill="#ff8fb1" opacity=".5" transform="rotate(-25 53 47)"/>
+            <ellipse cx="86" cy="42" rx="5" ry="2.8" fill="#ff8fb1" opacity=".5" transform="rotate(-25 86 42)"/>
+            <g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="19" rx="5" fill="#111318"/></g>
+            <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="18" rx="4.25" fill="#111318"/></g>
           </g>
         </svg>
       </div>
