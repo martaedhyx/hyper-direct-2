@@ -139,26 +139,21 @@ input[type=text]{text-transform:uppercase}
 
 <section class="landing" id="landing" aria-label="Hyper Direct">
   <div class="stars"></div><div class="stars2"></div><canvas class="l-canvas" id="lCanvas" aria-hidden="true"></canvas><div class="l-glow"></div><div class="l-flash" aria-hidden="true"></div>
-  <div class="l-mascot" role="img" aria-label="Maskot AI futuristik Hyper Direct">
-    <svg viewBox="0 0 100 100" focusable="false" aria-hidden="true">
+  <div class="l-mascot" role="img" aria-label="Maskot Hyper Direct">
+    <svg viewBox="0 0 100 100" focusable="false">
       <defs>
-        <radialGradient id="landingMascotGradient" cx="30%" cy="24%" r="78%"><stop offset="0" stop-color="#596779"/><stop offset=".38" stop-color="#202b3a"/><stop offset=".78" stop-color="#0b111b"/><stop offset="1" stop-color="#03070d"/></radialGradient>
-        <linearGradient id="landingRing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9fbff"/><stop offset=".48" stop-color="#46e8ff"/><stop offset="1" stop-color="#648cff"/></linearGradient>
-        <clipPath id="landingMascotClip"><circle cx="50" cy="50" r="43.5"/></clipPath>
+        <radialGradient id="mg2" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#eef1f6"/><stop offset=".82" stop-color="#cfd5de"/><stop offset="1" stop-color="#aeb6c2"/></radialGradient>
+        <clipPath id="mc2"><circle cx="50" cy="50" r="47.5"/></clipPath>
       </defs>
-      <circle cx="50" cy="50" r="48" fill="none" stroke="url(#landingRing)" stroke-width="2.2" opacity=".82"/>
-      <circle cx="50" cy="50" r="43.5" fill="url(#landingMascotGradient)" stroke="#8befff" stroke-opacity=".55" stroke-width="1.2"/>
-      <path d="M23 26 Q50 7 76 27" fill="none" stroke="#dffaff" stroke-width="2" stroke-linecap="round" opacity=".34"/>
-      <g clip-path="url(#landingMascotClip)">
-        <path d="M18 62 Q50 80 82 60" fill="none" stroke="#31dff8" stroke-width="1.2" opacity=".24"/>
-        <ellipse cx="37" cy="45" rx="10" ry="13" fill="#06111c" stroke="#56eaff" stroke-width="1.1"/>
-        <ellipse cx="65" cy="45" rx="10" ry="13" fill="#06111c" stroke="#56eaff" stroke-width="1.1"/>
-        <g class="l-eye-wrap"><rect class="l-eye" x="33" y="37" width="7" height="16" rx="3.5" fill="#f1fdff" filter="drop-shadow(0 0 4px #39e7ff)"/></g>
-        <g class="l-eye-wrap"><rect class="l-eye" x="61" y="37" width="7" height="16" rx="3.5" fill="#f1fdff" filter="drop-shadow(0 0 4px #39e7ff)"/></g>
-        <path d="M42 66 Q50 71 58 66" fill="none" stroke="#69eaff" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+      <circle cx="50" cy="50" r="49" fill="url(#mg2)"/>
+      <circle cx="50" cy="50" r="48.4" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="1.2"/>
+      <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
+      <g clip-path="url(#mc2)">
+        <g id="lCheeks"><ellipse cx="53" cy="47" rx="6" ry="3.2" fill="#ff8fb1" opacity=".5" transform="rotate(-25 53 47)"/>
+        <ellipse cx="86" cy="42" rx="5" ry="2.8" fill="#ff8fb1" opacity=".5" transform="rotate(-25 86 42)"/></g>
+        <g id="lEyes"><g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="19" rx="5" fill="#111318"/></g>
+        <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="18" rx="4.25" fill="#111318"/></g></g>
       </g>
-      <circle cx="50" cy="50" r="47" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width=".8"/>
-      <circle cx="17" cy="53" r="2" fill="#48e9ff"/><circle cx="82" cy="33" r="1.8" fill="#8caeff"/>
     </svg>
   </div>
   <div class="l-shadow"></div>
