@@ -333,6 +333,16 @@ input[type="file"]::-webkit-file-upload-button{
 .status.connected::before,.menu-layout .status.connected::before{color:#39ff83!important}
 
 
+/* Active gaze animation for the original mascot eyes; preserve original eye geometry and colors */
+.landing .l-mascot .m-eye{
+  transform-box:fill-box;transform-origin:center;
+  animation:hdEyeBlink 4.1s infinite!important;
+}
+@keyframes hdEyeBlink{
+  0%,18%,20%,49%,51%,78%,80%,100%{transform:scaleY(1)}
+  19%,50%,79%{transform:scaleY(.12)}
+}
+
 /* Landing title: stronger, clean monochrome typography */
 .landing .l-title{
   font-family:"Arial Black","Helvetica Neue",Arial,sans-serif!important;
@@ -388,6 +398,42 @@ input[type="file"]::-webkit-file-upload-button{
   <div class="l-foot">official broadcaster | martaedhyx</div>
 </section>
 <script>
+(function(){
+  var mascot=document.querySelector('.landing .l-mascot');
+  if(!mascot)return;
+  var eyes=Array.from(mascot.querySelectorAll('.m-eye'));
+  if(eyes.length<2)return;
+  var bases=eyes.map(function(el){return{x:parseFloat(el.getAttribute('x')),y:parseFloat(el.getAttribute('y'))};});
+  var gazeTimer=null,step=0;
+  function look(dx,dy){
+    eyes.forEach(function(el,i){
+      el.style.transition='transform 180ms ease-out';
+      el.style.translate=(dx+(i?1:-1)*.35)+'px '+dy+'px';
+    });
+  }
+  function reset(){
+    eyes.forEach(function(el){el.style.translate='0px 0px';});
+  }
+  /* Natural, lively glances; the original eye shapes and fills are untouched. */
+  function nextGaze(){
+    if(document.hidden)return;
+    var patterns=[[1.1,0],[-1.1,.25],[0,-.65],[.55,.55],[-.6,-.2],[0,0],[1,.35],[-.8,.1],[0,0]];
+    var p=patterns[step++%patterns.length];
+    look(p[0],p[1]);
+    gazeTimer=window.setTimeout(function(){
+      reset();
+      gazeTimer=window.setTimeout(nextGaze,420+Math.random()*1050);
+    },260+Math.random()*330);
+  }
+  gazeTimer=window.setTimeout(nextGaze,500);
+  window.addEventListener('pointermove',function(ev){
+    var r=mascot.getBoundingClientRect();
+    var dx=Math.max(-1,Math.min(1,(ev.clientX-(r.left+r.width/2))/(r.width/2)));
+    var dy=Math.max(-1,Math.min(1,(ev.clientY-(r.top+r.height/2))/(r.height/2)));
+    look(dx*1.15,dy*.8);
+  },{passive:true});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)reset();});
+})();
 (function(){
   var L=document.getElementById('landing'), cv=document.getElementById('lCanvas'), title=document.getElementById('lTitle');
   if(!L||!cv||!title)return;
