@@ -245,29 +245,30 @@ input::placeholder{color:#ddd!important}
 .menu-layout [style*="border-color"],.menu-layout [style*="border:"],.menu-layout hr{border-color:#fff!important}
 
 
-/* Hyper Direct active eye animation sequence — preserve mascot SVG design and colors */
-@keyframes hdEyesActive{
-  0%,8%,100%{transform:scaleY(1.15) translate(0,0)}
-  12%,18%{transform:scaleY(1.15) translate(-2.2px,0)}
-  23%,29%{transform:scaleY(1.15) translate(0,2.1px)}
-  34%,42%{transform:scaleY(1.15) translate(0,0)}
-  46%{transform:scaleY(.12) translate(0,7px)}
-  49%,54%{transform:scaleY(1.15) translate(0,0)}
-  61%,68%{transform:scaleY(1.15) translate(2px,-1px)}
-  73%,80%{transform:scaleY(1.15) translate(-1px,1px)}
-  85%,92%{transform:scaleY(1.15) translate(0,0)}
+/* Hyper Direct eye motion v2: visibly active, original eye shapes and fills retained */
+@keyframes hdEyesActiveV2{
+  0%,7%,100%{transform:translate(0,0) scaleY(1.15)}
+  10%,16%{transform:translate(-5px,0) scaleY(1.15)}
+  20%,26%{transform:translate(0,5px) scaleY(1.15)}
+  30%,36%{transform:translate(0,0) scaleY(1.15)}
+  39%,41%{transform:translate(0,7px) scaleY(.10)}
+  43%,49%{transform:translate(0,0) scaleY(1.15)}
+  53%,59%{transform:translate(4px,-2px) scaleY(1.15)}
+  63%,69%{transform:translate(-3px,3px) scaleY(1.15)}
+  73%,78%{transform:translate(0,0) scaleY(1.15)}
+  81%,84%{transform:translate(0,7px) scaleY(.10)}
+  87%,94%{transform:translate(0,0) scaleY(1.15)}
 }
-@keyframes hdEyesWink{
-  0%,44%,50%,100%{transform:scaleY(1.15) translate(0,0)}
-  46%,48%{transform:scaleY(.08) translate(0,7px)}
+@keyframes hdEyesWinkV2{
+  0%,38%,44%,100%{transform:translate(0,0) scaleY(1.15)}
+  40%,42%{transform:translate(0,7px) scaleY(.08)}
 }
 .l-mascot #lEyes rect.m-eye,.brand .mascot svg rect.m-eye{
-  animation:hdEyesActive 6.8s ease-in-out infinite!important;
-  transform-box:fill-box;transform-origin:center;
+  animation:hdEyesActiveV2 5.6s ease-in-out infinite!important;
+  transform-box:fill-box!important;transform-origin:center!important;
 }
-.brand .mascot svg rect.m-eye:nth-of-type(2){
-  animation:hdEyesWink 6.8s ease-in-out infinite!important;
-}
+.brand .mascot svg rect.m-eye:nth-of-type(1){animation:hdEyesActiveV2 5.6s ease-in-out infinite!important}
+.brand .mascot svg g:nth-of-type(2) rect.m-eye{animation:hdEyesWinkV2 5.6s ease-in-out infinite!important}
 @media(prefers-reduced-motion:reduce){
  .l-mascot #lEyes rect.m-eye,.brand .mascot svg rect.m-eye{animation:none!important}
 }
