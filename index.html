@@ -395,19 +395,25 @@ input[type="file"]::-webkit-file-upload-button{
 
 
 
-/* Opening smoke stays tightly confined to the HYPER DIRECT title */
+/* Smoke particles follow the letter silhouettes of HYPER DIRECT, then fade after 5 seconds */
 .title-smoke-wrap{position:relative;display:inline-block;max-width:100%;isolation:isolate}
-.title-smoke{position:absolute;inset:-18% -5%;z-index:2;pointer-events:none;overflow:hidden;opacity:1;animation:titleSmokeFade 5s ease-out forwards}
-.title-smoke i{position:absolute;inset:-30%;display:block;filter:blur(13px);background:
- radial-gradient(ellipse at 18% 50%,rgba(255,255,255,.94) 0,rgba(210,210,210,.86) 12%,rgba(100,100,100,.65) 27%,transparent 43%),
- radial-gradient(ellipse at 52% 38%,rgba(245,245,245,.9) 0,rgba(130,130,130,.8) 17%,transparent 40%),
- radial-gradient(ellipse at 82% 62%,rgba(235,235,235,.86) 0,rgba(95,95,95,.72) 19%,transparent 43%),
- radial-gradient(ellipse at 48% 75%,rgba(65,65,65,.95) 0,rgba(20,20,20,.8) 24%,transparent 52%);
- animation:titleSmokeDrift 4.7s ease-in-out infinite alternate}
-.title-smoke i:nth-child(2){transform:scale(1.2);opacity:.82;filter:blur(18px);animation-duration:3.8s;animation-direction:alternate-reverse}
-.title-smoke i:nth-child(3){transform:scale(.9);opacity:.7;filter:blur(9px);animation-duration:5.2s}
-@keyframes titleSmokeFade{0%,28%{opacity:1}62%{opacity:.72}82%,100%{opacity:0;visibility:hidden}}
-@keyframes titleSmokeDrift{0%{translate:-3% 3%;scale:1.08}50%{translate:3% -2%;scale:1.02}100%{translate:-2% -5%;scale:.92}}
+.title-smoke{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:visible;opacity:1;animation:titleSmokeFade 5s ease-out forwards}
+.title-smoke i{position:absolute;inset:0;display:block;filter:blur(2.8px);background:
+ radial-gradient(ellipse at 8% 48%,rgba(245,245,245,.95) 0 2%,rgba(165,165,165,.88) 4%,transparent 10%),
+ radial-gradient(ellipse at 17% 36%,rgba(230,230,230,.94) 0 3%,rgba(105,105,105,.82) 6%,transparent 12%),
+ radial-gradient(ellipse at 27% 55%,rgba(250,250,250,.92) 0 3%,rgba(130,130,130,.82) 6%,transparent 12%),
+ radial-gradient(ellipse at 38% 44%,rgba(225,225,225,.96) 0 3%,rgba(105,105,105,.85) 6%,transparent 12%),
+ radial-gradient(ellipse at 49% 58%,rgba(245,245,245,.94) 0 3%,rgba(115,115,115,.82) 6%,transparent 12%),
+ radial-gradient(ellipse at 59% 42%,rgba(240,240,240,.94) 0 3%,rgba(110,110,110,.82) 6%,transparent 12%),
+ radial-gradient(ellipse at 70% 54%,rgba(250,250,250,.95) 0 3%,rgba(125,125,125,.84) 6%,transparent 12%),
+ radial-gradient(ellipse at 81% 43%,rgba(230,230,230,.94) 0 3%,rgba(100,100,100,.82) 6%,transparent 12%),
+ radial-gradient(ellipse at 92% 53%,rgba(245,245,245,.94) 0 3%,rgba(115,115,115,.82) 6%,transparent 12%);
+ -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 100%);mask-image:linear-gradient(90deg,#000 0%,#000 100%);
+ animation:titleSmokeDrift 3.2s ease-in-out infinite alternate}
+.title-smoke i:nth-child(2){inset:5% -1%;opacity:.72;filter:blur(5px);transform:scaleY(1.12);animation-duration:4.1s;animation-direction:alternate-reverse}
+.title-smoke i:nth-child(3){inset:-2% 2%;opacity:.58;filter:blur(1.6px);transform:scaleY(.9);animation-duration:2.7s}
+@keyframes titleSmokeFade{0%,30%{opacity:1}65%{opacity:.55}100%{opacity:0;visibility:hidden}}
+@keyframes titleSmokeDrift{0%{translate:-1% 2%;scale:1.02}50%{translate:1% -1%;scale:1}100%{translate:0 -2%;scale:.98}}
 @media(prefers-reduced-motion:reduce){.title-smoke{animation-duration:1s}.title-smoke i{animation-duration:1s}}
 </style>
 </head>
