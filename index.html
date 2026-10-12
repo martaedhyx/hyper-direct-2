@@ -345,6 +345,18 @@ input[type="file"]::-webkit-file-upload-button{
 }
 
 
+/* Small landing mascot above the official broadcaster credit */
+.l-foot-mascot{
+  position:relative!important;display:block!important;
+  width:clamp(34px,9vw,48px)!important;height:clamp(34px,9vw,48px)!important;
+  margin:12px auto 7px!important;flex:none!important;
+  filter:drop-shadow(0 3px 7px rgba(255,255,255,.18))!important;
+  animation:none!important;
+}
+.l-foot-mascot svg{width:100%!important;height:100%!important;display:block!important}
+.l-foot-mascot .m-eye{animation:blink 4.2s infinite!important}
+.l-foot{margin-top:0!important}
+
 /* Requested neutral grey buttons: START and the main room/file actions */
 .landing .l-btn,
 .menu-layout>.card button{
@@ -387,6 +399,17 @@ input[type="file"]::-webkit-file-upload-button{
   <div class="l-foot">official broadcaster | martaedhyx</div>
 </section>
 <script>
+(function(){
+  var mascot=document.querySelector('.landing .l-mascot');
+  var credit=document.querySelector('.landing .l-foot');
+  if(mascot&&credit&&!document.querySelector('.landing .l-foot-mascot')){
+    var small=mascot.cloneNode(true);
+    small.className='l-foot-mascot';
+    small.setAttribute('role','img');
+    small.setAttribute('aria-label','Maskot kecil Hyper Direct');
+    credit.parentNode.insertBefore(small,credit);
+  }
+})();
 (function(){
   var L=document.getElementById('landing'), cv=document.getElementById('lCanvas'), title=document.getElementById('lTitle');
   if(!L||!cv||!title)return;
