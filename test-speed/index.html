@@ -219,8 +219,8 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
       <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
       <g clip-path="url(#mc2)">
         <g id="lCheeks"></g>
-        <g id="lEyes" class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="19" rx="5" fill="#111318"/></g>
-        <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="18" rx="4.25" fill="#111318"/></g></g>
+        <g id="lEyes" class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="20.9" rx="5.45" fill="#111318"/></g>
+        <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="19.8" rx="4.675" fill="#111318"/></g></g>
       </g>
     </svg>
   </div>
@@ -289,15 +289,7 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
   if(mascot){mascot.style.animation='none';mascot.style.translate='0px 0px';mascot.style.rotate='0deg';mascot.style.willChange='auto';}
   var eyeX=0,eyeY=0,eyeBlink=1;
   function paintEyes(){eyes.forEach(function(el){el.style.transform='translate('+eyeX.toFixed(1)+'px,'+eyeY.toFixed(1)+'px) scaleY('+eyeBlink+')';});}
-  L.addEventListener('pointermove',function(e){
-    if(!eyes.length||reduced||L.classList.contains('out'))return;
-    var mr=mascot?mascot.getBoundingClientRect():L.getBoundingClientRect();
-    var dx=e.clientX-(mr.left+mr.width/2),dy=e.clientY-(mr.top+mr.height/2);
-    eyeX=Math.max(-7,Math.min(7,dx/12));
-    eyeY=Math.max(-7,Math.min(7,dy/12));
-    paintEyes();
-  },{passive:true});
-  L.addEventListener('pointerleave',function(){eyeX=0;eyeY=0;paintEyes();},{passive:true});
+  // Gerakan mengikuti kursor dinonaktifkan; kedipan otomatis tetap aktif.
   if(!reduced){
     function blink(){
       if(L.classList.contains('out'))return;
@@ -324,8 +316,8 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
       <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
       <g clip-path="url(#hdMascotClip)">
         
-        <g class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect x="55" y="21" width="10" height="19" rx="5" fill="#111318"/></g>
-        <g transform="rotate(-25 80 26.5)"><rect x="75.75" y="17.5" width="8.5" height="18" rx="4.25" fill="#111318"/></g></g>
+        <g class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect x="55" y="21" width="10" height="20.9" rx="5.45" fill="#111318"/></g>
+        <g transform="rotate(-25 80 26.5)"><rect x="75.75" y="17.5" width="8.5" height="19.8" rx="4.675" fill="#111318"/></g></g>
       </g>
     </svg>
   </div>
@@ -371,12 +363,7 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
   var eyes=Array.from(svg.querySelectorAll('g rect'));
   if(eyes.length<2)return;
   var bases=eyes.map(function(el){return {el:el,x:parseFloat(el.getAttribute('x')),y:parseFloat(el.getAttribute('y')),h:parseFloat(el.getAttribute('height'))};});
-  window.addEventListener('pointermove',function(ev){
-    var r=svg.getBoundingClientRect();
-    var px=((ev.clientX-r.left)/r.width-.5)*2;
-    var py=((ev.clientY-r.top)/r.height-.5)*2;
-    bases.forEach(function(b){b.el.setAttribute('x',(b.x+Math.max(-1,Math.min(1,px))*2.1).toFixed(2));b.el.setAttribute('y',(b.y+Math.max(-1,Math.min(1,py))*1.8).toFixed(2));});
-  },{passive:true});
+  // Gerakan mengikuti kursor dinonaktifkan; kedipan otomatis tetap aktif.
   if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     function blink(){
       bases.forEach(function(b){b.el.setAttribute('height','2');b.el.setAttribute('y',(parseFloat(b.el.getAttribute('y'))+b.h-2).toFixed(2));});
