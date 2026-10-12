@@ -221,6 +221,29 @@ input::placeholder{color:#d0d0d0}
 .files:empty:after{border-style:dashed}
 .l-tag{color:#fff}
 
+
+/* Final strict black-and-white pass: remove remaining colored accents */
+:root{--cyan:#fff;--blue:#fff;--line:#fff;--accent:#fff;--accent2:#fff}
+.l-glow,.l-shadow,#lCheeks,.brand .mascot ellipse[fill="#ff8fb1"]{display:none!important}
+.l-canvas,.stars,.stars2{display:none!important}
+.l-mascot,.mascot{filter:none!important;box-shadow:none!important}
+.l-title,.l-title .ch,.brand-title{background:none!important;background-image:none!important;color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;filter:none!important}
+.l-btn,.landing .l-btn{background:#fff!important;color:#000!important;border-color:#fff!important;box-shadow:none!important}
+.l-btn:active,.landing .l-btn:active{background:#e5e5e5!important;color:#000!important}
+.brand,.brand:before,.brand:after{border-color:#fff!important;box-shadow:none!important}
+.brand .mascot svg [stroke]:not([stroke="none"]){stroke:#fff!important}
+.card,.menu-layout>.card,.fileitem,.code,.status,.files:empty:after,input,input[type=file],.file-preview,.file-preview img,.file-preview video{border-color:#fff!important;box-shadow:none!important}
+.card:before,.menu-layout>.card:before{background:#fff!important;opacity:1!important}
+button,.menu-layout button,.menu-layout .send-card>button,.fileitem a.download-btn{background:#fff!important;color:#000!important;border-color:#fff!important;box-shadow:none!important;text-shadow:none!important}
+button:hover,.menu-layout button:hover,button:active{background:#e5e5e5!important;color:#000!important;border-color:#fff!important}
+input,input[type=file],.menu-layout input[type=text]{background:#000!important;color:#fff!important;border-color:#fff!important}
+input::placeholder{color:#ddd!important}
+.step,.small,.tagline,.l-foot,.fileitem .file-name,.file-preview,.code,.status,.menu-layout .status{color:#fff!important;text-shadow:none!important}
+.status.connected,.menu-layout .status.connected{background:#000!important;color:#fff!important;border-color:#fff!important;box-shadow:none!important}
+.menu-layout .code{background:#000!important;color:#fff!important;border:1px solid #fff!important}
+.menu-layout svg [stroke]:not([stroke="none"]){stroke:#fff!important}
+.menu-layout [style*="border-color"],.menu-layout [style*="border:"],.menu-layout hr{border-color:#fff!important}
+
 </style>
 </head>
 <body>
