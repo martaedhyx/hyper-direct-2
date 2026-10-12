@@ -285,6 +285,26 @@ body{background:radial-gradient(ellipse at 50% -10%,#073d83 0%,#06142e 43%,#0308
 .fileitem a.download-btn:hover{box-shadow:0 0 22px #087cff80}
 @media(prefers-reduced-motion:reduce){.menu-layout>.card{box-shadow:none}}
 
+
+/* Hyper Direct 2 Test Speed — dark navy buttons with neon blue outlines */
+.menu-layout>.card:not(.send-card)>button{
+  background:linear-gradient(145deg,#061633 0%,#082653 58%,#061a39 100%);
+  color:#dff7ff;
+  border:1.5px solid #168bff;
+  text-shadow:0 0 9px #27bfff55;
+  box-shadow:inset 0 1px 0 #ffffff0d, inset 0 0 16px #087cff12, 0 0 0 1px #087cff25, 0 0 13px #087cff35;
+}
+.menu-layout>.card:not(.send-card)>button:hover{
+  background:linear-gradient(145deg,#09214a 0%,#0a3268 58%,#082653 100%);
+  border-color:#54eaff;
+  box-shadow:inset 0 0 18px #087cff20,0 0 0 1px #54eaff40,0 0 21px #087cff70;
+  color:#ffffff;
+}
+.menu-layout>.card:not(.send-card)>button:active{
+  background:#041027;
+  box-shadow:inset 0 0 16px #087cff35,0 0 12px #087cff55;
+}
+
 </style>
 </head>
 <body>
