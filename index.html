@@ -299,6 +299,30 @@ input[type="file"]::-webkit-file-upload-button{
   content:none!important;display:none!important;animation:none!important;
   background:none!important;box-shadow:none!important;filter:none!important;
 }
+
+
+/* Align room code and join-code field perfectly across the two room cards */
+.menu-layout{align-items:stretch!important}
+.menu-layout>.card{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  box-sizing:border-box!important;min-width:0!important;
+}
+.menu-layout>.card button{
+  display:block!important;width:100%!important;min-width:0!important;
+  box-sizing:border-box!important;margin:0 0 12px!important;
+}
+.menu-layout>.card .code,
+.menu-layout>.card #join{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  height:50px!important;min-height:50px!important;max-height:50px!important;
+  box-sizing:border-box!important;margin:0 0 12px!important;
+  padding:0 12px!important;border:1px solid #fff!important;border-radius:10px!important;
+  font:inherit!important;line-height:normal!important;text-align:center!important;
+}
+.menu-layout>.card #join{display:block!important}
+.menu-layout>.card .status,.menu-layout>.card .small{box-sizing:border-box!important;width:100%!important}
+
 </style>
 </head>
 <body>
