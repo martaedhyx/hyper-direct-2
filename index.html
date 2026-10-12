@@ -244,6 +244,34 @@ input::placeholder{color:#ddd!important}
 .menu-layout svg [stroke]:not([stroke="none"]){stroke:#fff!important}
 .menu-layout [style*="border-color"],.menu-layout [style*="border:"],.menu-layout hr{border-color:#fff!important}
 
+
+/* Hyper Direct active eye animation sequence — preserve mascot SVG design and colors */
+@keyframes hdEyesActive{
+  0%,8%,100%{transform:scaleY(1.15) translate(0,0)}
+  12%,18%{transform:scaleY(1.15) translate(-2.2px,0)}
+  23%,29%{transform:scaleY(1.15) translate(0,2.1px)}
+  34%,42%{transform:scaleY(1.15) translate(0,0)}
+  46%{transform:scaleY(.12) translate(0,7px)}
+  49%,54%{transform:scaleY(1.15) translate(0,0)}
+  61%,68%{transform:scaleY(1.15) translate(2px,-1px)}
+  73%,80%{transform:scaleY(1.15) translate(-1px,1px)}
+  85%,92%{transform:scaleY(1.15) translate(0,0)}
+}
+@keyframes hdEyesWink{
+  0%,44%,50%,100%{transform:scaleY(1.15) translate(0,0)}
+  46%,48%{transform:scaleY(.08) translate(0,7px)}
+}
+.l-mascot #lEyes rect.m-eye,.brand .mascot svg rect.m-eye{
+  animation:hdEyesActive 6.8s ease-in-out infinite!important;
+  transform-box:fill-box;transform-origin:center;
+}
+.brand .mascot svg rect.m-eye:nth-of-type(2){
+  animation:hdEyesWink 6.8s ease-in-out infinite!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .l-mascot #lEyes rect.m-eye,.brand .mascot svg rect.m-eye{animation:none!important}
+}
+
 </style>
 </head>
 <body>
