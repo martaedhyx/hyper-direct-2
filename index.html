@@ -276,6 +276,29 @@ input::placeholder{color:#ddd!important}
 
 
 
+
+
+/* Requested fixes: white file-picker label and no blue title animation on landing */
+input[type="file"]{color:#fff!important;background:#000!important}
+input[type="file"]::file-selector-button{
+  color:#fff!important;background:#000!important;border:1px solid #fff!important;
+}
+input[type="file"]::-webkit-file-upload-button{
+  color:#fff!important;background:#000!important;border:1px solid #fff!important;
+}
+.landing .l-title,.landing .l-title .w,.landing .l-title .ch,
+.landing .l-title span,.landing .l-title strong{
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  background:none!important;background-image:none!important;
+  text-shadow:none!important;filter:none!important;box-shadow:none!important;
+  animation:none!important;transition:none!important;opacity:1!important;
+  transform:none!important;
+}
+.landing .l-title::before,.landing .l-title::after,
+.landing .l-title *::before,.landing .l-title *::after{
+  content:none!important;display:none!important;animation:none!important;
+  background:none!important;box-shadow:none!important;filter:none!important;
+}
 </style>
 </head>
 <body>
