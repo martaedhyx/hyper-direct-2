@@ -350,16 +350,16 @@ button:focus-visible{outline:2px solid rgba(34,211,238,.75);outline-offset:2px}
 
 <div class="menu-layout">
 <div class="card">
-<div id="code" class="code">KODE 3 DIGIT</div>
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
+<div id="code" class="code">KODE 3 DIGIT</div>
 <button type="button" onclick="window.hdCopyRoomCode()">Salin Kode Room</button>
 <div id="status" class="status">Belum terhubung.</div>
 <p class="small">Bagikan kode 3 digit di atas ke teman.</p>
 </div>
 
 <div class="card">
-<input id="join" type="text" inputmode="numeric" maxlength="3" placeholder="Kode 3 digit" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)">
 <button type="button" onclick="window.hdJoinRoom()">Masuk Room</button>
+<input id="join" type="text" inputmode="numeric" maxlength="3" placeholder="Kode 3 digit" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)">
 <p class="small">Masukkan kode 3 digit dari perangkat pengirim.</p>
 </div>
 
