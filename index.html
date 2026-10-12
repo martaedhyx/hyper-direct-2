@@ -349,13 +349,14 @@ input[type="file"]::-webkit-file-upload-button{
 .l-foot-mascot{
   position:relative!important;display:block!important;
   width:clamp(34px,9vw,48px)!important;height:clamp(34px,9vw,48px)!important;
-  margin:12px auto 7px!important;flex:none!important;
+  margin:0 auto 2px!important;flex:none!important;
   filter:drop-shadow(0 3px 7px rgba(255,255,255,.18))!important;
   animation:none!important;
 }
-.l-foot-mascot svg{width:100%!important;height:100%!important;display:block!important}
-.l-foot-mascot .m-eye{animation:blink 4.2s infinite!important}
+.l-foot-mascot svg{width:100%!important;height:100%!important;display:block!important;overflow:visible!important}
+.l-foot-mascot .m-eye{transform-box:fill-box!important;transform-origin:center!important;animation:blink 4.2s infinite!important}
 .l-foot{margin-top:0!important}
+.landing .l-mascot .m-eye,.landing .l-foot-mascot .m-eye{transform-box:fill-box;transform-origin:center;animation:blink 4.2s infinite!important}
 
 /* Requested neutral grey buttons: START and the main room/file actions */
 .landing .l-btn,
@@ -407,6 +408,12 @@ input[type="file"]::-webkit-file-upload-button{
     small.className='l-foot-mascot';
     small.setAttribute('role','img');
     small.setAttribute('aria-label','Maskot kecil Hyper Direct');
+    /* Reuse the original mascot's exact eye animation and place it directly above the credit. */
+    small.querySelectorAll('.m-eye').forEach(function(eye){
+      eye.style.animation='blink 4.2s infinite';
+      eye.style.transformBox='fill-box';
+      eye.style.transformOrigin='center';
+    });
     credit.parentNode.insertBefore(small,credit);
   }
 })();
