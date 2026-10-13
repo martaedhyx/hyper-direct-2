@@ -476,8 +476,43 @@ input[type="file"]::-webkit-file-upload-button{
   color:transparent!important;-webkit-text-fill-color:transparent!important;
   text-shadow:0 0 14px rgba(28,190,255,.2)!important;
 }
+/* Slightly larger title with a crisp neon outline and a moving glossy sweep */
+.landing #lTitle {
+  font-size:1.12em!important;
+  position:relative!important;
+  isolation:isolate;
+  overflow:visible;
+  -webkit-text-stroke:1.35px rgba(133,239,255,.92)!important;
+  paint-order:stroke fill;
+}
+.landing #lTitle .w,.landing #lTitle span {
+  -webkit-text-stroke:1.35px rgba(133,239,255,.92)!important;
+  paint-order:stroke fill;
+}
+@keyframes hdGlossSweep {
+  0%,12% {left:-38%;opacity:0}
+  18% {opacity:.95}
+  62% {opacity:.85}
+  78%,100% {left:112%;opacity:0}
+}
+.landing #lTitle::after {
+  content:""!important;
+  position:absolute!important;
+  z-index:3!important;
+  pointer-events:none!important;
+  top:-8%!important;
+  bottom:-8%!important;
+  left:-38%;
+  width:24%!important;
+  border-radius:50%!important;
+  background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,0) 18%,rgba(190,250,255,.2) 34%,rgba(255,255,255,.98) 48%,rgba(105,226,255,.78) 56%,rgba(255,255,255,.14) 72%,transparent 100%)!important;
+  filter:blur(1px) drop-shadow(0 0 9px rgba(92,231,255,.95))!important;
+  mix-blend-mode:screen!important;
+  transform:skewX(-18deg)!important;
+  animation:hdGlossSweep 3.4s ease-in-out 5s infinite!important;
+}
 @media(prefers-reduced-motion:reduce) {
- .landing #lTitle,.landing #lTitle .w,.landing #lTitle span,.landing #lTitle::before {animation:none!important;opacity:1!important;filter:none!important}
+ .landing #lTitle,.landing #lTitle .w,.landing #lTitle span,.landing #lTitle::before,.landing #lTitle::after {animation:none!important;opacity:1!important;filter:none!important}
 }
 
 </style>
