@@ -790,7 +790,7 @@ window.hdSendFile=async function(){var f=document.getElementById('file').files[0
     parts.forEach(function(part){values[part.type]=part.value;});
     function cap(value){return value?value.charAt(0).toLocaleUpperCase('id-ID')+value.slice(1):'';}
     dateNode.textContent=cap(values.weekday)+', '+values.day+' : '+cap(values.month)+' : '+values.year;
-    var timeParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now);
+    var timeParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date(now.getTime()+20*60*1000));
     var timeValues={};
     timeParts.forEach(function(part){timeValues[part.type]=part.value;});
     timeNode.textContent=(timeValues.hour||'00')+' : '+(timeValues.minute||'00')+' : '+(timeValues.second||'00');
