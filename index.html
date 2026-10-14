@@ -424,20 +424,27 @@ input[type="file"]::-webkit-file-upload-button{
   animation:none!important;
 }
 
-/* Hyper Direct 2 landing title: subtle premium 3D, white with black shadow */
-.l-title{
+/* Hyper Direct 2 landing title: subtle premium 3D, white with black shadow.
+   Higher specificity overrides earlier monochrome reset rules. */
+.landing .l-title,
+.landing #lTitle{
   font-family:Montserrat,'Arial Black','Helvetica Neue',Arial,sans-serif!important;
   font-weight:900!important;
   font-size:clamp(2.35rem,11.8vw,5rem)!important;
   letter-spacing:.025em!important;
   background:none!important;
+  background-image:none!important;
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
+  -webkit-text-stroke:0!important;
   filter:none!important;
   text-shadow:0 2px 0 #bdbdbd,0 3px 1px rgba(0,0,0,.85),0 5px 9px rgba(0,0,0,.72)!important;
 }
-.l-title .ch{
+.landing .l-title .ch,
+.landing #lTitle .ch,
+.landing .l-title span{
   background-image:linear-gradient(90deg,#fff 0%,#fff 100%)!important;
+  background-color:transparent!important;
   color:#fff!important;
   -webkit-text-fill-color:#fff!important;
   text-shadow:0 1px 0 #bdbdbd,0 2px 1px rgba(0,0,0,.9),0 4px 6px rgba(0,0,0,.75)!important;
