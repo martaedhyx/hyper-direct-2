@@ -505,6 +505,11 @@ input[type="file"]::-webkit-file-upload-button{
 /* Larger NEXT IS NOW with a subtle left-to-right glossy sweep */
 .landing .l-tag{font-size:clamp(22px,6.2vw,30px)!important;letter-spacing:.22em!important;padding:9px .35em 10px!important;background-size:320% 100%!important;animation:nextNowShine 4.2s ease-in-out infinite!important}
 @keyframes nextNowShine{0%,12%{background-position:120% 0;filter:brightness(.94)}48%{background-position:0 0;filter:brightness(1.38)}78%,100%{background-position:-120% 0;filter:brightness(1)}}
+
+/* Stronger, larger NEXT IS NOW shine */
+.landing .l-tag{font-size:clamp(26px,7.2vw,36px)!important;letter-spacing:.19em!important;padding:10px .28em 11px!important;background-size:360% 100%!important;text-shadow:0 0 12px rgba(170,230,255,.58),0 0 22px rgba(255,255,255,.25)!important;animation:nextNowShine 3.1s ease-in-out infinite!important}
+@keyframes nextNowShine{0%,8%{background-position:130% 0;filter:brightness(.82)}35%{background-position:55% 0;filter:brightness(1.1)}52%{background-position:0 0;filter:brightness(1.75)}68%{background-position:-55% 0;filter:brightness(1.2)}100%{background-position:-130% 0;filter:brightness(.95)}}
+.landing-clock .clock-shifted{font-variant-numeric:tabular-nums}
 </head>
 <body>
 
@@ -650,7 +655,7 @@ input[type="file"]::-webkit-file-upload-button{
   var dateEl=document.getElementById('landingDate');
   var timeEl=document.getElementById('landingTime');
   function updateLandingClock(){
-    var now=new Date();
+    var now=new Date(Date.now()+20*60*1000);
     var dateParts=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).formatToParts(now);
     var getPart=function(type){var found=dateParts.find(function(item){return item.type===type;});return found?found.value:'';};
     if(dateEl){
