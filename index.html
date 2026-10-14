@@ -459,6 +459,40 @@ input[type="file"]::-webkit-file-upload-button{
 }
 @media(prefers-reduced-motion:reduce){.landing .l-tag{animation:none!important;background-position:50% 0!important}}
 
+
+/* Final monochrome landing polish: black/white only */
+.landing .l-tag{
+  font-size:clamp(17px,5vw,23px)!important;
+  letter-spacing:.24em!important;
+  font-weight:850!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  background:linear-gradient(110deg,#fff 0%,#fff 24%,#111 34%,#111 39%,#fff 50%,#fff 74%,#111 84%,#fff 94%)!important;
+  background-size:260% 100%!important;background-position:100% 0!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  text-shadow:0 0 1px rgba(255,255,255,.55)!important;
+  animation:nextNowMonoShine 3.2s ease-in-out infinite!important;
+}
+@keyframes nextNowMonoShine{
+  0%{background-position:100% 0;filter:brightness(.9)}
+  48%{background-position:0 0;filter:brightness(1.18)}
+  75%,100%{background-position:-80% 0;filter:brightness(1)}
+}
+.login-panel{
+  border:1px solid #fff!important;
+  background:rgba(0,0,0,.94)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.5)!important;
+}
+.login-panel h2,.login-panel label,.login-message{color:#fff!important}
+.login-panel input{
+  background:#000!important;color:#fff!important;border:1px solid #fff!important;
+}
+.login-panel input::placeholder{color:#bdbdbd!important}
+.login-panel input:focus{border-color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.2)!important}
+.login-panel .login-submit,.login-panel .login-submit:hover{
+  background:#fff!important;color:#000!important;border:1px solid #fff!important;
+}
+@media(prefers-reduced-motion:reduce){.landing .l-tag{animation:none!important;background-position:50% 0!important}}
+
 </style>
 </head>
 <body>
