@@ -460,6 +460,10 @@ input[type="file"]::-webkit-file-upload-button{
 @media(prefers-reduced-motion:reduce){.landing .l-tag{animation:none!important;background-position:50% 0!important}}
 
 
+/* Live date and clock below NEXT IS NOW */
+.landing-clock{position:relative;display:grid;gap:5px;margin:-12px 0 18px;color:#fff;text-align:center;font-size:clamp(12px,3.4vw,15px);font-weight:650;letter-spacing:.045em;line-height:1.45;font-variant-numeric:tabular-nums}
+.login-panel input#loginUser{text-transform:none!important}
+
 /* Final monochrome landing polish: black/white only */
 .landing .l-tag{
   font-size:clamp(17px,5vw,23px)!important;
@@ -500,10 +504,11 @@ input[type="file"]::-webkit-file-upload-button{
 <section class="landing" id="landing" aria-label="Hyper Direct">
   <div class="stars"></div><div class="stars2"></div><canvas class="l-canvas" id="lCanvas" aria-hidden="true"></canvas><div class="l-glow"></div><div class="l-flash" aria-hidden="true"></div>
   <p class="l-tag">NEXT IS NOW</p>
+  <div class="landing-clock" aria-live="off"><div id="landingDate">Hari, tanggal : Bulan : Tahun</div><div id="landingTime">Jam : Menit : Detik</div></div>
   <form class="login-panel" id="loginForm" autocomplete="on">
     <h2>LOGIN SYSTEM</h2>
     <label for="loginUser">User ID</label>
-    <input id="loginUser" name="username" type="text" autocomplete="username" placeholder="Masukkan User ID" required>
+    <input id="loginUser" name="username" type="text" autocomplete="username" placeholder="masukkan user id" required>
     <label for="loginPassword">Password</label>
     <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required>
     <button class="login-submit" type="submit">LOGIN</button>
@@ -635,6 +640,14 @@ input[type="file"]::-webkit-file-upload-button{
     setTimeout(blink,1800);
   }
   function enterApp(){L.classList.add('out');setTimeout(function(){L.style.display='none';if(raf)cancelAnimationFrame(raf);clearTimeout(last);},460);}
+  var dateEl=document.getElementById('landingDate');
+  var timeEl=document.getElementById('landingTime');
+  function updateLandingClock(){
+    var now=new Date();
+    if(dateEl){var dateText=new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(now);var bits=dateText.split(', ');var dateBits=(bits[1]||'').split(' ');var dayName=bits[0]||'';var monthName=dateBits[1]||'';dayName=dayName.charAt(0).toLocaleUpperCase('id-ID')+dayName.slice(1);monthName=monthName.charAt(0).toLocaleUpperCase('id-ID')+monthName.slice(1);dateEl.textContent=dayName+', '+(dateBits[0]||'')+' : '+monthName+' : '+(dateBits[2]||'');}
+    if(timeEl){var timeText=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(now);timeEl.textContent=timeText.replace(/[.:]/g,' : ');}
+  }
+  updateLandingClock();window.setInterval(updateLandingClock,1000);
   var userField=document.getElementById('loginUser');
   var loginForm=document.getElementById('loginForm');
   var loginMessage=document.getElementById('loginMessage');
