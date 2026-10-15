@@ -423,119 +423,34 @@ input[type="file"]::-webkit-file-upload-button{
   -webkit-text-stroke:0!important;text-shadow:none!important;filter:none!important;
   animation:none!important;
 }
-
-
-/* Login System on the main Hyper Direct 2 landing page */
-.landing{justify-content:flex-start!important;padding-top:calc(env(safe-area-inset-top) + 22px)!important;padding-bottom:calc(env(safe-area-inset-bottom) + 18px)!important;overflow-y:auto!important}
-.landing .l-title{margin-top:8px!important;margin-bottom:7px!important;font-size:clamp(36px,10vw,64px)!important}
-.landing .l-tag{margin-bottom:18px!important}
-.landing .l-btn{margin-bottom:18px!important}
-.login-panel{position:relative;z-index:2;width:min(100%,360px);padding:20px 18px 14px;border:1px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(5,12,25,.88);box-shadow:0 14px 38px rgba(0,0,0,.38);text-align:left;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.login-panel h2{margin:0 0 17px;text-align:center;color:#fff;font-size:18px;font-weight:850;letter-spacing:.12em}
-.login-panel label{display:block;margin:12px 0 6px;color:#e5edf6;font-size:13px;font-weight:700}
-.login-panel input{display:block;width:100%;min-height:44px;padding:11px 12px;border:1px solid #667085;border-radius:10px;background:#080d16;color:#fff;font:inherit;font-size:15px;outline:none}
-.login-panel input:focus{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.12)}
-.login-panel .login-submit{display:block;width:100%;min-height:44px;margin-top:16px;border:1px solid #667085;border-radius:10px;background:#080d16;color:#fff;font-weight:850;letter-spacing:.08em}
-.login-panel .login-submit:hover{background:#151d2b;border-color:#aab4c3}
-.login-message{min-height:17px;margin:9px 0 0;text-align:center;font-size:12px;color:#fff}
-@media(max-height:700px){.landing{padding-top:calc(env(safe-area-inset-top) + 10px)!important}.landing .l-title{font-size:clamp(32px,8vw,48px)!important}.landing .l-tag{margin-bottom:10px!important}.landing .l-btn{margin-bottom:10px!important}.login-panel{padding:14px 16px 10px}.login-panel input{min-height:40px}}
-
-
-/* NEXT IS NOW: moving glossy highlight */
-.landing .l-tag{
-  position:relative!important;display:inline-block!important;overflow:hidden!important;
-  margin-top:12px!important;margin-bottom:22px!important;padding:7px .35em 8px!important;
-  color:transparent!important;-webkit-text-fill-color:transparent!important;
-  background:linear-gradient(110deg,#a9c7d9 0%,#f7fdff 18%,#ffffff 28%,#91eaff 38%,#f8fdff 48%,#b6d7e9 62%,#ffffff 75%,#8edcf7 88%,#eafaff 100%)!important;
-  background-size:240% 100%!important;background-position:100% 0!important;
-  -webkit-background-clip:text!important;background-clip:text!important;
-  text-shadow:0 0 9px rgba(170,230,255,.25)!important;
-  animation:nextNowShine 3.2s ease-in-out infinite!important;
-}
-@keyframes nextNowShine{
-  0%{background-position:100% 0;filter:brightness(.92)}
-  45%{background-position:0 0;filter:brightness(1.35)}
-  70%,100%{background-position:-80% 0;filter:brightness(1)}
-}
-@media(prefers-reduced-motion:reduce){.landing .l-tag{animation:none!important;background-position:50% 0!important}}
-
-
-/* Live date and clock below NEXT IS NOW */
-.landing-clock{position:relative;display:grid;gap:7px;margin:-12px 0 18px;color:#fff;text-align:center;font-size:clamp(13px,3.8vw,16px);font-weight:650;letter-spacing:.045em;line-height:1.45;font-variant-numeric:tabular-nums;visibility:visible;opacity:1}.landing-clock #landingDate{display:block;min-height:1.45em}.landing-clock #landingTime{display:block;font-family:inherit;font-size:inherit;font-weight:650;letter-spacing:.045em;color:#fff;text-shadow:none;min-height:1.45em}
-.login-panel input#loginUser{text-transform:none!important}
-
-/* Final monochrome landing polish: black/white only */
-.landing .l-tag{
-  font-size:clamp(17px,5vw,23px)!important;
-  letter-spacing:.24em!important;
-  font-weight:850!important;
-  color:#fff!important;-webkit-text-fill-color:#fff!important;
-  background:linear-gradient(110deg,#fff 0%,#fff 24%,#111 34%,#111 39%,#fff 50%,#fff 74%,#111 84%,#fff 94%)!important;
-  background-size:260% 100%!important;background-position:100% 0!important;
-  -webkit-background-clip:text!important;background-clip:text!important;
-  text-shadow:0 0 1px rgba(255,255,255,.55)!important;
-  animation:nextNowMonoShine 3.2s ease-in-out infinite!important;
-}
-@keyframes nextNowMonoShine{
-  0%{background-position:100% 0;filter:brightness(.9)}
-  48%{background-position:0 0;filter:brightness(1.18)}
-  75%,100%{background-position:-80% 0;filter:brightness(1)}
-}
-.login-panel{
-  border:1px solid #fff!important;
-  background:rgba(0,0,0,.94)!important;
-  box-shadow:0 12px 34px rgba(0,0,0,.5)!important;
-}
-.login-panel h2,.login-panel label,.login-message{color:#fff!important}
-.login-panel input{
-  background:#000!important;color:#fff!important;border:1px solid #fff!important;
-}
-.login-panel input::placeholder{color:#bdbdbd!important}
-.login-panel input:focus{border-color:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.2)!important}
-.login-panel .login-submit,.login-panel .login-submit:hover{
-  background:#fff!important;color:#000!important;border:1px solid #fff!important;
-}
-@media(prefers-reduced-motion:reduce){.landing .l-tag{animation:none!important;background-position:50% 0!important}}
-
 </style>
-
-/* Keep digital clock exactly the same size as the date line */
-.landing-clock #landingTime{font-size:clamp(13px,3.8vw,16px)!important;font-family:inherit!important;font-weight:650!important;letter-spacing:.045em!important;line-height:1.45!important;text-shadow:none!important}
-
-/* Larger NEXT IS NOW with a subtle left-to-right glossy sweep */
-.landing .l-tag{font-size:clamp(22px,6.2vw,30px)!important;letter-spacing:.22em!important;padding:9px .35em 10px!important;background-size:320% 100%!important;animation:nextNowShine 4.2s ease-in-out infinite!important}
-@keyframes nextNowShine{0%,12%{background-position:120% 0;filter:brightness(.94)}48%{background-position:0 0;filter:brightness(1.38)}78%,100%{background-position:-120% 0;filter:brightness(1)}}
-
-/* Stronger, larger NEXT IS NOW shine */
-.landing .l-tag{font-size:clamp(26px,7.2vw,36px)!important;letter-spacing:.19em!important;padding:10px .28em 11px!important;background-size:360% 100%!important;text-shadow:0 0 12px rgba(170,230,255,.58),0 0 22px rgba(255,255,255,.25)!important;animation:nextNowShine 3.1s ease-in-out infinite!important}
-@keyframes nextNowShine{0%,8%{background-position:130% 0;filter:brightness(.82)}35%{background-position:55% 0;filter:brightness(1.1)}52%{background-position:0 0;filter:brightness(1.75)}68%{background-position:-55% 0;filter:brightness(1.2)}100%{background-position:-130% 0;filter:brightness(.95)}}
-.landing-clock .clock-shifted{font-variant-numeric:tabular-nums}
 </head>
 <body>
 
 <section class="landing" id="landing" aria-label="Hyper Direct">
   <div class="stars"></div><div class="stars2"></div><canvas class="l-canvas" id="lCanvas" aria-hidden="true"></canvas><div class="l-glow"></div><div class="l-flash" aria-hidden="true"></div>
-  <div class="l-mascot" role="img" aria-label="Maskot Hyper Direct">
-    <svg viewBox="0 0 100 100" focusable="false">
-      <defs>
-        <radialGradient id="mg2" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#eef1f6"/><stop offset=".82" stop-color="#cfd5de"/><stop offset="1" stop-color="#aeb6c2"/></radialGradient>
-        <clipPath id="mc2"><circle cx="50" cy="50" r="47.5"/></clipPath>
-      </defs>
-      <circle cx="50" cy="50" r="49" fill="url(#mg2)"/>
-      <circle cx="50" cy="50" r="48.4" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="1.2"/>
-      <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
-      <g clip-path="url(#mc2)">
-        <g id="lCheeks"></g>
-        <g id="lEyes" class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="20.9" rx="5.45" fill="#111318"/></g>
-        <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="19.8" rx="4.675" fill="#111318"/></g></g>
-      </g>
-    </svg>
-  </div>
-  <div class="l-shadow"></div>
   <h1 class="l-title" id="lTitle" aria-label="HYPER DIRECT"><span class="w">HYPER</span> <span class="w">DIRECT</span></h1>
   <p class="l-tag">NEXT IS NOW</p>
   <button type="button" class="l-btn" id="startBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>START</button>
-  <div class="l-foot">official broadcaster | martaedhyx</div>
+  <div class="l-foot">
+    <div class="l-mascot" role="img" aria-label="Maskot Hyper Direct">
+      <svg viewBox="0 0 100 100" focusable="false">
+        <defs>
+          <radialGradient id="mg2" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#eef1f6"/><stop offset=".82" stop-color="#cfd5de"/><stop offset="1" stop-color="#aeb6c2"/></radialGradient>
+          <clipPath id="mc2"><circle cx="50" cy="50" r="47.5"/></clipPath>
+        </defs>
+        <circle cx="50" cy="50" r="49" fill="url(#mg2)"/>
+        <circle cx="50" cy="50" r="48.4" fill="none" stroke="rgba(15,23,42,.12)" stroke-width="1.2"/>
+        <ellipse cx="30" cy="24" rx="15" ry="7" fill="#fff" opacity=".9" transform="rotate(-35 30 24)"/>
+        <g clip-path="url(#mc2)">
+          <g id="lCheeks"></g>
+          <g id="lEyes" class="mascot-eyes-group"><g transform="rotate(-25 60 30.5)"><rect class="m-eye" x="55" y="21" width="10" height="20.9" rx="5.45" fill="#111318"/></g>
+          <g transform="rotate(-25 80 26.5)"><rect class="m-eye" x="75.75" y="17.5" width="8.5" height="19.8" rx="4.675" fill="#111318"/></g></g>
+        </g>
+      </svg>
+    </div>
+    <span>official broadcaster | martaedhyx</span>
+  </div>
 </section>
 <script>
 (function(){
@@ -642,35 +557,7 @@ input[type="file"]::-webkit-file-upload-button{
     }
     setTimeout(blink,1800);
   }
-  function enterApp(){L.classList.add('out');setTimeout(function(){L.style.display='none';if(raf)cancelAnimationFrame(raf);clearTimeout(last);},460);}
-  var dateEl=document.getElementById('landingDate');
-  var timeEl=document.getElementById('landingTime');
-  function updateLandingClock(){
-    var now=new Date(Date.now()+20*60*1000);
-    var dateParts=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).formatToParts(now);
-    var getPart=function(type){var found=dateParts.find(function(item){return item.type===type;});return found?found.value:'';};
-    if(dateEl){
-      var dayName=getPart('weekday');
-      var monthName=getPart('month');
-      dayName=dayName.charAt(0).toLocaleUpperCase('id-ID')+dayName.slice(1);
-      monthName=monthName.charAt(0).toLocaleUpperCase('id-ID')+monthName.slice(1);
-      dateEl.textContent=dayName+', '+getPart('day')+' : '+monthName+' : '+getPart('year');
-    }
-    if(timeEl){
-      timeEl.textContent=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(now).replace(/[.:]/g,' : ');
-    }
-  }
-  updateLandingClock();window.setInterval(updateLandingClock,1000);
-  var userField=document.getElementById('loginUser');
-  var loginForm=document.getElementById('loginForm');
-  var loginMessage=document.getElementById('loginMessage');
-  if(loginForm)loginForm.addEventListener('submit',function(event){
-    event.preventDefault();
-    var user=(userField&&userField.value||'').trim();
-    var pass=(document.getElementById('loginPassword')||{}).value||'';
-    if(user==='martaedi'&&pass==='1111'){if(loginMessage)loginMessage.textContent='Login berhasil';enterApp();}
-    else{if(loginMessage)loginMessage.textContent='User ID atau password salah';var p=document.getElementById('loginPassword');if(p)p.value='';}
-  });
+  var btn=document.getElementById('startBtn');if(btn)btn.addEventListener('click',function(){L.classList.add('out');setTimeout(function(){L.style.display='none';if(raf)cancelAnimationFrame(raf);clearTimeout(last);},460);});
 })();
 </script>
 
@@ -768,31 +655,6 @@ window.hdCreateRoom=function(){var c=hdCode();document.getElementById('code').te
 window.hdJoinRoom=function(){var c=document.getElementById('join').value.trim().toUpperCase();if(!/^\d{3}$/.test(c)){hdStatus('Masukkan kode room 3 digit.');return}if(typeof Peer==='undefined'){hdStatus('Koneksi belum siap.');return}if(window.hdPeer){try{window.hdPeer.destroy()}catch(e){}}hdStatus('Menghubungkan...');window.hdPeer=new Peer(undefined,{debug:0,config:{iceServers:hdIceServers}});window.hdPeer.on('open',function(){hdStatus('Server room terjangkau. Mencari kode '+c+'...');window.hdConn=window.hdPeer.connect('hd-'+c,{reliable:true});hdBind(window.hdConn)});window.hdPeer.on('error',function(e){hdStatus('Koneksi gagal: '+(e.type||'error'))})};
 function hdBind(c){window.hdConn=c;var hdConnectTimer=window.setTimeout(function(){if(!c.open)hdStatus('Belum tersambung. Room ditemukan, tetapi jalur koneksi belum terbentuk.');},20000);c.on('open',function(){window.clearTimeout(hdConnectTimer);if(c.dataChannel)c.dataChannel.binaryType='arraybuffer';hdStatus('TERHUBUNG ✓')});c.on('close',function(){hdStatus('Koneksi terputus.')});c.on('error',function(e){var detail=e&&(e.type||e.message)?(e.type||e.message):'error tidak diketahui';hdStatus('Koneksi bermasalah: '+detail)});if(c.peerConnection){var pc=c.peerConnection;pc.addEventListener('iceconnectionstatechange',function(){if(pc.iceConnectionState==='failed')hdStatus('Jalur antarjaringan gagal (ICE failed). Periksa TURN/server relay.');else if(pc.iceConnectionState==='disconnected')hdStatus('Jalur antarjaringan terputus sementara (ICE disconnected).')});}c.on('data',function(data){if(data&&data.kind==='file-start'){window.hdMeta=data;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0;window.hdAcked=0;hdTransfer('Menerima '+data.name+' (0%)...');return}if(data&&data.kind==='ack'){window.hdWaiting=Math.max(window.hdWaiting||0,data.n);window.hdAcked=Math.max(window.hdAcked||0,data.n);return}if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);window.hdParts.push(u);window.hdReceived+=u.byteLength;var now=Date.now();if(!window.hdLastUi||now-window.hdLastUi>=120||window.hdReceived>=window.hdMeta.size){window.hdLastUi=now;hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...')}if(window.hdReceived-window.hdLastAck>=5*1048576||window.hdReceived>=window.hdMeta.size){window.hdLastAck=window.hdReceived;c.send({kind:'ack',n:window.hdReceived})}return}if(data&&data.kind==='file-end'&&window.hdMeta){var meta=window.hdMeta;var blob=new Blob(window.hdParts,{type:meta.type||'application/octet-stream'});var fileUrl=URL.createObjectURL(blob);var a=document.createElement('a');a.href=fileUrl;a.download=meta.name;a.textContent='⬇ Download';a.className='download-btn';var item=document.createElement('div');item.className='fileitem';var label=document.createElement('div');label.className='file-name';label.textContent=meta.name;item.appendChild(label);var preview=document.createElement('div');preview.className='file-preview';var type=String(meta.type||'').toLowerCase();if(type.indexOf('image/')===0){var img=document.createElement('img');img.src=fileUrl;img.alt='Pratinjau '+meta.name;img.loading='lazy';preview.appendChild(img)}else if(type.indexOf('video/')===0){var video=document.createElement('video');video.src=fileUrl;video.controls=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label','Pemutar video '+meta.name);preview.appendChild(video)}else if(type.indexOf('audio/')===0){var audio=document.createElement('audio');audio.src=fileUrl;audio.controls=true;audio.preload='metadata';audio.setAttribute('aria-label','Pemutar audio '+meta.name);preview.appendChild(audio)}else{var note=document.createElement('div');note.className='preview-note';note.textContent='Pratinjau tidak tersedia untuk format ini. File tetap bisa diunduh.';preview.appendChild(note)}item.appendChild(preview);var actions=document.createElement('div');actions.className='file-actions';var size=document.createElement('span');size.className='file-size';size.textContent=(meta.size/1048576).toFixed(meta.size<1048576?2:1)+' MB';actions.appendChild(size);actions.appendChild(a);item.appendChild(actions);document.getElementById('files').prepend(item);hdTransfer('File diterima ✓');window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0}})}
 window.hdSendFile=async function(){var f=document.getElementById('file').files[0];if(!f){hdTransfer('Pilih foto/file dulu.');return}if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return}var conn=window.hdConn;var chunkSize=131072,highWater=8*1048576,lastUi=0;window.hdAcked=0;conn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});var pos=0;while(pos<f.size){if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}while(pos-(window.hdAcked||0)>=10*1048576){if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}await new Promise(function(r){setTimeout(r,5)})}var dc=conn.dataChannel;if(dc&&dc.bufferedAmount>highWater){await new Promise(function(r){setTimeout(r,5)});continue}var end=Math.min(pos+chunkSize,f.size);var b=await f.slice(pos,end).arrayBuffer();if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}conn.send(b);pos+=b.byteLength;var now=Date.now();if(now-lastUi>=120||pos>=f.size){lastUi=now;hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'% · '+(pos/1048576).toFixed(1)+' / '+(f.size/1048576).toFixed(1)+' MB · diterima '+Math.round((window.hdAcked||0)/f.size*100)+'%')}}while((window.hdAcked||0)<f.size){if(!conn.open){hdTransfer('Koneksi terputus saat menunggu konfirmasi penerima.');return}await new Promise(function(r){setTimeout(r,10)})}conn.send({kind:'file-end'});hdTransfer('File terkirim dan diterima ✓')};
-</script>
-<script>
-(function(){
-  function renderHyperDirectClock(){
-    var dateNode=document.getElementById('landingDate');
-    var timeNode=document.getElementById('landingTime');
-    if(!dateNode||!timeNode)return;
-    var now=new Date();
-    var parts=new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).formatToParts(now);
-    var values={};
-    parts.forEach(function(part){values[part.type]=part.value;});
-    function cap(value){return value?value.charAt(0).toLocaleUpperCase('id-ID')+value.slice(1):'';}
-    dateNode.textContent=cap(values.weekday)+', '+values.day+' : '+cap(values.month)+' : '+values.year;
-    var timeParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date(now.getTime()+20*60*1000));
-    var timeValues={};
-    timeParts.forEach(function(part){timeValues[part.type]=part.value;});
-    timeNode.textContent=(timeValues.hour||'00')+' : '+(timeValues.minute||'00')+' : '+(timeValues.second||'00');
-    dateNode.style.display='block';dateNode.style.visibility='visible';dateNode.style.opacity='1';dateNode.style.color='#fff';
-    timeNode.style.display='block';timeNode.style.visibility='visible';timeNode.style.opacity='1';timeNode.style.color='#fff';
-    var clock=dateNode.parentElement;
-    if(clock){clock.style.display='grid';clock.style.visibility='visible';clock.style.opacity='1';}
-  }
-  renderHyperDirectClock();
-  window.setInterval(renderHyperDirectClock,1000);
-})();
 </script>
 </body>
 </html>
