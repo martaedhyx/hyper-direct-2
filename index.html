@@ -676,7 +676,11 @@ function hdBind(c){
    if(pc.connectionState==='failed')hdStatus('WebRTC gagal membentuk jalur. '+hdIceStatus());
   });
   pc.addEventListener('icecandidateerror',function(ev){
-   hdStatus('Kesalahan server ICE/TURN ('+(ev.errorCode||'tanpa kode')+'). Periksa kredensial relay dan jaringan.');
+   var url=ev.url||'URL tidak tersedia';
+   var detail=ev.errorText||'tanpa detail server';
+   var code=ev.errorCode||'tanpa kode';
+   console.warn('[HD2 ICE/TURN]',{code:code,url:url,detail:detail,address:ev.address||'',port:ev.port||0});
+   hdStatus('ICE/TURN '+code+' — '+url+' — '+detail);
   });
  }
  iceTimer=window.setInterval(function(){attachPc();pollCount++;if(pc||pollCount>80){window.clearInterval(iceTimer)}},250);
