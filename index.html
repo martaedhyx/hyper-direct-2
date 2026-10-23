@@ -646,11 +646,16 @@ function hdTransfer(t){document.getElementById('transfer').textContent=t}
 var hdIceServers=[
  {urls:"stun:stun.relay.metered.ca:80"},
  {urls:"stun:stun.l.google.com:19302"},
- /* Restore the relay endpoint used by the earlier working build. */
+ /* Standard relay endpoints. */
  {urls:"turn:standard.relay.metered.ca:80",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
  {urls:"turn:standard.relay.metered.ca:80?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
  {urls:"turn:standard.relay.metered.ca:443",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
- {urls:"turns:standard.relay.metered.ca:443?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"}
+ {urls:"turns:standard.relay.metered.ca:443?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
+ /* Global relay fallback for networks where standard endpoints fail. */
+ {urls:"turn:global.relay.metered.ca:80",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
+ {urls:"turn:global.relay.metered.ca:80?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
+ {urls:"turn:global.relay.metered.ca:443",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"},
+ {urls:"turns:global.relay.metered.ca:443?transport=tcp",username:"d4d2d59f68cde0a118779e80",credential:"SQ8NDhcFlMMHg7RE"}
 ];
 function hdCode(){return String(Math.floor(Math.random()*1000)).padStart(3,'0')}
 window.hdCopyRoomCode=function(){var el=document.getElementById('code');var code=(el&&el.textContent||'').trim();if(!/^\d{3}$/.test(code)){hdStatus('Buat room terlebih dahulu.');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(function(){hdStatus('Kode room disalin: '+code)}).catch(function(){hdStatus('Kode room: '+code)})}else{hdStatus('Kode room: '+code)}};
