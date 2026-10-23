@@ -669,8 +669,8 @@ function hdBind(c){
   pc=c.peerConnection;
   try{if(c.dataChannel)c.dataChannel.binaryType='arraybuffer'}catch(e){}
   pc.addEventListener('iceconnectionstatechange',function(){
-   if(pc.iceConnectionState==='failed')hdStatus('Jalur antarjaringan gagal (ICE failed). '+hdIceStatus()+'. TURN perlu diperiksa.');
-   else if(pc.iceConnectionState==='disconnected'&&!c.open)hdStatus('Jalur antarjaringan terputus sementara. '+hdIceStatus());
+   if(pc.iceConnectionState==='failed')hdStatus('Jalur antarjaringan gagal. '+hdIceStatus()+'. '+(window.hdLastIceError||''));
+   else if(pc.iceConnectionState==='disconnected'&&!c.open)hdStatus('Jalur antarjaringan terputus. '+hdIceStatus()+'. '+(window.hdLastIceError||''));
    else if((pc.iceConnectionState==='connected'||pc.iceConnectionState==='completed')&&!c.open)hdStatus('Jalur jaringan terbentuk. Menyelesaikan koneksi...');
   });
   pc.addEventListener('connectionstatechange',function(){
@@ -681,7 +681,7 @@ function hdBind(c){
    var detail=ev.errorText||'tanpa detail server';
    var code=ev.errorCode||'tanpa kode';
    console.warn('[HD2 ICE/TURN]',{code:code,url:url,detail:detail,address:ev.address||'',port:ev.port||0});
-   if(code!==701||!window.hdIceErrorShown){window.hdIceErrorShown=true;hdStatus(code===701?'Server STUN/TURN tidak terjangkau (701). Mencoba jalur alternatif...':'ICE/TURN '+code+' — '+url+' — '+detail);}
+   if(code===701){window.hdLastIceError='701 pada '+url+' ('+detail+')';if(!window.hdIceErrorShown){window.hdIceErrorShown=true;hdStatus('Server ICE tidak terjangkau (701): '+url+'. Mencoba jalur alternatif...')}}else{window.hdLastIceError=code+' pada '+url+' ('+detail+')';if(!window.hdIceErrorShown){window.hdIceErrorShown=true;hdStatus('ICE/TURN '+window.hdLastIceError)}}
   });
  }
  iceTimer=window.setInterval(function(){attachPc();pollCount++;if(pc||pollCount>80){window.clearInterval(iceTimer)}},250);
@@ -689,7 +689,7 @@ function hdBind(c){
   if(!c.open){
    attachPc();
    var closed=(c.open===false&&c.peerConnection&&c.peerConnection.signalingState==='closed');
-   hdStatus(closed?'Koneksi ditutup sebelum terbuka. Periksa pesan error di perangkat pembuat room. '+hdIceStatus()+'.':'Belum tersambung setelah 20 detik. '+hdIceStatus()+'.');
+   hdStatus((closed?'Koneksi ditutup sebelum terbuka. ':'Belum tersambung setelah 20 detik. ')+hdIceStatus()+'. '+(window.hdLastIceError||'Tidak ada detail server ICE yang tercatat.'));
   }
  },20000);
  c.on('open',function(){window.clearTimeout(hdConnectTimer);if(iceTimer)window.clearInterval(iceTimer);attachPc();if(c.dataChannel)c.dataChannel.binaryType='arraybuffer';hdStatus('TERHUBUNG ✓')});
