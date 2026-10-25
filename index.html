@@ -487,6 +487,31 @@ input[type="file"]::-webkit-file-upload-button{
   animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
 }
 
+
+/* HD1 landing background + effects adapted for HD2; mascot and app logic untouched */
+.landing{
+  background:
+    radial-gradient(760px 420px at 50% -8%,rgba(34,211,238,.16),transparent 62%),
+    radial-gradient(620px 460px at -18% 32%,rgba(59,130,246,.13),transparent 64%),
+    radial-gradient(620px 460px at 118% 78%,rgba(34,211,238,.08),transparent 64%),
+    #08111f!important;
+}
+.landing .l-canvas{
+  display:block!important;
+  position:absolute!important;top:0!important;left:0!important;
+  width:100%!important;height:100%!important;pointer-events:none!important;
+  z-index:0!important;
+}
+.landing .l-glow{
+  display:block!important;position:absolute!important;
+  width:520px!important;height:520px!important;left:50%!important;top:38%!important;
+  transform:translate(-50%,-50%)!important;
+  background:radial-gradient(circle,rgba(34,211,238,.13),transparent 62%)!important;
+  pointer-events:none!important;z-index:0!important;
+}
+.landing .l-flash{z-index:0!important}
+.landing .stars,.landing .stars2{display:none!important}
+
 </style>
 </head>
 <body>
