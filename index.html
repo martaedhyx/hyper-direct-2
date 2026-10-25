@@ -694,7 +694,7 @@ input[type="file"]::-webkit-file-upload-button{
 <div class="menu-layout">
 <div class="card">
 <button type="button" onclick="window.hdCreateRoom()">Buat Room</button>
-<div id="code" class="code">KODE 3 DIGIT</div>
+<div id="code" class="code">- - -</div>
 <button type="button" onclick="window.hdCopyRoomCode()">Salin Kode Room</button>
 <div id="status" class="status">Belum terhubung.</div>
 <p class="small">Bagikan kode 3 digit di atas ke teman.</p>
@@ -702,7 +702,7 @@ input[type="file"]::-webkit-file-upload-button{
 
 <div class="card">
 <button type="button" onclick="window.hdJoinRoom()">Masuk Room</button>
-<input id="join" type="text" inputmode="numeric" maxlength="3" placeholder="Kode 3 digit" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)">
+<input id="join" type="text" inputmode="numeric" maxlength="3" placeholder="- - -" autocomplete="off" oninput="this.value=this.value.replace(/\D/g,'').slice(0,3)">
 <p class="small">Masukkan kode 3 digit dari perangkat pengirim.</p>
 </div>
 
