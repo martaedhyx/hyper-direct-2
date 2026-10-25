@@ -667,6 +667,7 @@ input[type="file"]::-webkit-file-upload-button{
 
 
 
+<canvas id="menuSky" aria-hidden="true"></canvas>
 <div class="wrap">
 <div class="brand">
   <div class="mascot" aria-hidden="true">
@@ -807,6 +808,59 @@ function hdBind(c){
  c.on('data',function(data){if(data&&data.kind==='file-start'){window.hdMeta=data;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0;window.hdAcked=0;hdTransfer('Menerima '+data.name+' (0%)...');return}if(data&&data.kind==='ack'){window.hdWaiting=Math.max(window.hdWaiting||0,data.n);window.hdAcked=Math.max(window.hdAcked||0,data.n);return}if(window.hdMeta&&(data instanceof ArrayBuffer||ArrayBuffer.isView(data))){var u=data instanceof ArrayBuffer?new Uint8Array(data):new Uint8Array(data.buffer,data.byteOffset,data.byteLength);window.hdParts.push(u);window.hdReceived+=u.byteLength;var now=Date.now();if(!window.hdLastUi||now-window.hdLastUi>=120||window.hdReceived>=window.hdMeta.size){window.hdLastUi=now;hdTransfer('Menerima '+Math.round(window.hdReceived/window.hdMeta.size*100)+'%...')}if(window.hdReceived-window.hdLastAck>=4*1048576||window.hdReceived>=window.hdMeta.size){window.hdLastAck=window.hdReceived;c.send({kind:'ack',n:window.hdReceived})}return}if(data&&data.kind==='file-end'&&window.hdMeta){var meta=window.hdMeta;var blob=new Blob(window.hdParts,{type:meta.type||'application/octet-stream'});var fileUrl=URL.createObjectURL(blob);var a=document.createElement('a');a.href=fileUrl;a.download=meta.name;a.textContent='⬇ Download';a.className='download-btn';var item=document.createElement('div');item.className='fileitem';var label=document.createElement('div');label.className='file-name';label.textContent=meta.name;item.appendChild(label);var preview=document.createElement('div');preview.className='file-preview';var type=String(meta.type||'').toLowerCase();if(type.indexOf('image/')===0){var img=document.createElement('img');img.src=fileUrl;img.alt='Pratinjau '+meta.name;img.loading='lazy';preview.appendChild(img)}else if(type.indexOf('video/')===0){var video=document.createElement('video');video.src=fileUrl;video.controls=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label','Pemutar video '+meta.name);preview.appendChild(video)}else if(type.indexOf('audio/')===0){var audio=document.createElement('audio');audio.src=fileUrl;audio.controls=true;audio.preload='metadata';audio.setAttribute('aria-label','Pemutar audio '+meta.name);preview.appendChild(audio)}else{var note=document.createElement('div');note.className='preview-note';note.textContent='Pratinjau tidak tersedia untuk format ini. File tetap bisa diunduh.';preview.appendChild(note)}item.appendChild(preview);var actions=document.createElement('div');actions.className='file-actions';var size=document.createElement('span');size.className='file-size';size.textContent=(meta.size/1048576).toFixed(meta.size<1048576?2:1)+' MB';actions.appendChild(size);actions.appendChild(a);item.appendChild(actions);document.getElementById('files').prepend(item);hdTransfer('File diterima ✓');window.hdMeta=null;window.hdParts=[];window.hdReceived=0;window.hdLastAck=0}})}
 window.hdSendFile=async function(){var f=document.getElementById('file').files[0];if(!f){hdTransfer('Pilih foto/file dulu.');return}if(!window.hdConn||!window.hdConn.open){hdTransfer('Belum terhubung.');return}var conn=window.hdConn;var chunkSize=65536,highWater=4*1048576,lastUi=0;window.hdAcked=0;conn.send({kind:'file-start',name:f.name,size:f.size,type:f.type});var pos=0;while(pos<f.size){if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}while(pos-(window.hdAcked||0)>=8*1048576){if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}await new Promise(function(r){setTimeout(r,5)})}var dc=conn.dataChannel;if(dc&&dc.bufferedAmount>highWater){await new Promise(function(r){setTimeout(r,5)});continue}var end=Math.min(pos+chunkSize,f.size);var b=await f.slice(pos,end).arrayBuffer();if(!conn.open){hdTransfer('Koneksi terputus saat mengirim.');return}conn.send(b);pos+=b.byteLength;var now=Date.now();if(now-lastUi>=120||pos>=f.size){lastUi=now;hdTransfer('Mengirim '+Math.round(pos/f.size*100)+'% · '+(pos/1048576).toFixed(1)+' / '+(f.size/1048576).toFixed(1)+' MB · diterima '+Math.round((window.hdAcked||0)/f.size*100)+'%')}}while((window.hdAcked||0)<f.size){if(!conn.open){hdTransfer('Koneksi terputus saat menunggu konfirmasi penerima.');return}await new Promise(function(r){setTimeout(r,10)})}conn.send({kind:'file-end'});hdTransfer('File terkirim dan diterima ✓')};
 </script>
+
+<script>
+/* Menu sky: salinan efek bintang bergerak yang terpisah dari layout dan kontrol menu */
+(function(){
+  var canvas=document.getElementById('menuSky');
+  if(!canvas||!canvas.getContext)return;
+  var ctx=canvas.getContext('2d'),w=1,h=1,dpr=1,stars=[],last=0,nextShoot=0,shoot=null,raf=0;
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rnd(a,b){return a+Math.random()*(b-a)}
+  function newStar(){return{x:rnd(0,w),y:rnd(0,h),z:rnd(.08,1),p:rnd(0,6.28),tw:rnd(1,3),c:Math.random()<.22?'191,239,255':'255,255,255'}}
+  function size(){
+    w=Math.max(1,window.innerWidth);h=Math.max(1,window.innerHeight);
+    dpr=Math.min(window.devicePixelRatio||1,1.5);
+    canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+    canvas.style.width=w+'px';canvas.style.height=h+'px';
+    if(ctx)ctx.setTransform(dpr,0,0,dpr,0,0);
+    var want=Math.min(160,Math.max(50,Math.round(w*h/2300)));
+    while(stars.length<want)stars.push(newStar());stars.length=want;
+  }
+  function draw(t){
+    if(!ctx)return;
+    var dt=Math.min(.05,last?(t-last)/1000:.016);last=t;ctx.clearRect(0,0,w,h);
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];s.z-=.045*dt;
+      if(s.z<=.03){stars[i]=newStar();continue}
+      var x=w/2+(s.x-w/2)/s.z,y=h/2+(s.y-h/2)/s.z;
+      if(x < -40||x>w+40||y < -40||y>h+40){stars[i]=newStar();continue}
+      var near=1-s.z,a=Math.min(1,near*1.2+.4)*Math.min(1,near/.08);
+      a*=.72+.28*Math.sin(t/1000*s.tw+s.p);
+      var r=.75+near*2;ctx.fillStyle='rgba('+s.c+','+a+')';ctx.fillRect(x-r/2,y-r/2,r,r);
+    }
+    if(!shoot&&t>nextShoot){
+      var left=Math.random()<.5,ang=(left?205:335)*Math.PI/180+rnd(-.12,.12),v=rnd(.9,1.25)*Math.max(w,360);
+      shoot={x:rnd(.25,.85)*w,y:rnd(.03,.3)*h,vx:Math.cos(ang)*v,vy:Math.abs(Math.sin(ang))*v,t0:t,dur:rnd(650,950),len:rnd(80,140)};
+      if(!left)shoot.vx=Math.abs(shoot.vx);nextShoot=t+rnd(3500,8000);
+    }
+    if(shoot){
+      var o=shoot,p=(t-o.t0)/o.dur;
+      if(p>=1)shoot=null;
+      else{
+        var hx=o.x+o.vx*(t-o.t0)/1000,hy=o.y+o.vy*(t-o.t0)/1000,n=Math.hypot(o.vx,o.vy),tx=hx-o.vx/n*o.len,ty=hy-o.vy/n*o.len,al=Math.sin(Math.PI*p),g=ctx.createLinearGradient(hx,hy,tx,ty);
+        g.addColorStop(0,'rgba(255,255,255,'+al+')');g.addColorStop(.3,'rgba(210,230,255,'+al*.5+')');g.addColorStop(1,'rgba(210,230,255,0)');
+        ctx.strokeStyle=g;ctx.lineWidth=1.7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(tx,ty);ctx.stroke();
+      }
+    }
+    if(!reduced)raf=requestAnimationFrame(draw);
+  }
+  size();nextShoot=performance.now()+rnd(1800,3200);draw(0);
+  window.addEventListener('resize',function(){size();if(reduced)draw(0)});
+  document.addEventListener('visibilitychange',function(){if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=0}else if(!reduced&&!raf){last=0;raf=requestAnimationFrame(draw)}});
+})();
+</script>
+
 </body>
 </html>
 
@@ -841,5 +895,17 @@ window.hdSendFile=async function(){var f=document.getElementById('file').files[0
   position:relative!important;flex:none!important;
   width:46.8px!important;height:46.8px!important;
   min-width:46.8px!important;min-height:46.8px!important;
+}
+</style>
+
+<style>
+/* Sky effect on the menu only. Existing controls and menu geometry remain unchanged. */
+#menuSky{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;
+  display:block!important;pointer-events:none!important;z-index:0!important;opacity:.8;
+}
+.wrap{position:relative;z-index:1}
+.menu-layout>.card,.card{
+  background:rgba(0,0,0,.84)!important;
 }
 </style>
