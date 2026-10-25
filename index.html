@@ -809,3 +809,17 @@ window.hdSendFile=async function(){var f=document.getElementById('file').files[0
 </script>
 </body>
 </html>
+
+<style>
+/* HD1 moving sky/stars effect enabled for HD2; mascot and app behavior unchanged */
+.landing{isolation:isolate;overflow:hidden}
+.landing .l-canvas{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  pointer-events:none!important;z-index:0!important;
+}
+.landing .l-glow{z-index:0!important;pointer-events:none!important}
+.landing .l-flash{z-index:0!important;pointer-events:none!important}
+.landing .stars,.landing .stars2{display:none!important}
+.landing .l-mascot,.landing .l-title,.landing .l-tag,.landing .l-btn,.landing .l-foot{position:relative;z-index:1}
+</style>
