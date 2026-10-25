@@ -979,3 +979,16 @@ window.hdSendFile=async function(){var f=document.getElementById('file').files[0
 
 
 </style>
+
+/* Menu-only adjustment: lower the mascot/title slightly and remove the white divider under the brand. */
+.brand{
+  transform:translateY(6px)!important;
+  border-bottom:0!important;
+  padding-bottom:8px!important;
+}
+.brand:before,.brand:after{
+  display:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
