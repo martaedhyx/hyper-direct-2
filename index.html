@@ -14,6 +14,9 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <meta http-equiv="Cache-Control" content="no-store">
 <title>Hyper Direct</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;--bg:#06101f;--panel:#0d1b30;--panel2:#10233b;--line:#1b4260;--cyan:#39e7ff;--blue:#318bff;--muted:#9ab6cc;--white:#edfaff}
 *{box-sizing:border-box}
@@ -424,6 +427,34 @@ input[type="file"]::-webkit-file-upload-button{
   -webkit-text-stroke:0!important;text-shadow:none!important;filter:none!important;
   animation:none!important;
 }
+
+/* Hyper Direct 1 title identity — title only; HD2 mascot, menus and transfer logic untouched */
+.brand-title{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif!important;
+  font-size:27px!important;font-weight:800!important;line-height:1.08!important;
+  color:#67e8f9!important;-webkit-text-fill-color:#67e8f9!important;
+  letter-spacing:-.7px!important;
+  background:none!important;background-image:none!important;
+  text-shadow:0 0 12px rgba(34,211,238,.38),0 0 30px rgba(34,211,238,.20)!important;
+  filter:none!important;
+}
+.l-title{
+  margin:24px 0 10px!important;
+  font-family:'Orbitron','Arial Black','Helvetica Neue',Arial,sans-serif!important;
+  font-weight:900!important;
+  font-size:clamp(2.5rem,12.6vw,5.98rem)!important;
+  line-height:1.1!important;letter-spacing:.04em!important;
+  background:linear-gradient(90deg,#22d3ee 0%,#38bdf8 45%,#2563eb 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  filter:drop-shadow(0 0 10px rgba(34,211,238,.25)) drop-shadow(0 0 26px rgba(59,130,246,.16))!important;
+}
+.l-title .ch{
+  background-image:linear-gradient(90deg,#22d3ee 0%,#38bdf8 45%,#2563eb 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+}
+
 </style>
 </head>
 <body>
@@ -583,7 +614,7 @@ input[type="file"]::-webkit-file-upload-button{
           </g>
         </svg>
       </div>
-  <div class="brand-title">HYPER DIRECT</div>
+  <div class="brand-title">Hyper Direct</div>
 </div>
 <p class="small tagline">Kirim foto & file jarak jauh.</p>
 
